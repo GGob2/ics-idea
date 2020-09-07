@@ -1,9 +1,5 @@
 pragma solidity >=0.4.22 < 0.7.0;
 
-
-
-
-
 /* 
     1. 중요한 명령과 중요하지 않은 명령으로 구분할 것 
     (중요한 명령들을 배열에 넣는다고 생각했을 때, 점수를 어떻게 관리할 것인지 생각해야함)
@@ -14,33 +10,33 @@ pragma solidity >=0.4.22 < 0.7.0;
     3. verify 과정 시작할 때  
 
   */
-  
-contract Cmd {    
-    struct Command {
-        
+
+contract Command {    
+    
+    struct sigCommand {
         string name;
-        uint score;
-        
+        uint score;        
     }
 
-    Command[] public commands;
+    sigCommand[] public sigCommands;
     
-    string[] public names;
+    string[] public unSigCommand;
     
     // significant commands
-    function setName(string memory _cmdd) public {
-        names.push(string('1'));    
-        names.push('2');
-    }
-    
-    function setCmd(string memory _cmdName, uint _cmdScore) public {
-        commands.push(Command(_cmdName, _cmdScore, _cmdSig));
+    function setSIgCmd(string memory _sigCmdName, uint _sigCmdScore) public {
+        sigCommands.push(sigCommand(_sigCmdName, _sigCmdScore));
     }
 
-    function getCmd(uint _num) public view returns (string memory getCmdName, uint getCmdScore, bool getCmdSig) {
-        getCmdName = commands[_num].name;
-        getCmdScore = commands[_num].score;
-        getCmdSig = commands[_num].sig;
-    } 
+    function setUnSigCmd(string memory _unSigCmdName) public {
+        unSigCommand.push(_unSigCmdName);    
+    }
+    
+    
+
+    // function getCmd(uint _num) public view returns (string memory getCmdName, uint getCmdScore, bool getCmdSig) {
+    //     getCmdName = commands[_num].name;
+    //     getCmdScore = commands[_num].score;
+    //     getCmdSig = commands[_num].sig;
+    // } 
 
 }
