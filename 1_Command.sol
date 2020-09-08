@@ -9,31 +9,50 @@ pragma solidity >=0.4.22 < 0.7.0;
 
     3. verify 과정 시작할 때  
 
+    * 현재 발견한 문제점 : solidity는 int, uint만 지원.. score 할 때 소수점 사용 못함.. --> ?
+
+      아이디어 변경 할 수 있나? --> 직원에게 스택을 쌓아서, verify 할 때 스택이 몇스택 이상 쌓이면 추가적으로 점수를 쳐주는 식으로 생각..?
+      ex) 5점이 필요한 명령 & 10점의 검증 그룹 선정 || 검증 그룹 중, 스택이 1스택 이상 있는 사람이 4명 & 추가점수 부여 조건 :
+          스택이 1스택 이상인 사람이 3명이상 검증했을 경우 전체 verify 과정에 1점 부여...?
   */
 
 contract Command {    
     
-    event issueCmd(address _issuer, uint _cmdNumber);
+    // event issueCmd(address _issuer, uint _cmdNumber);
+    // event verifyCmd(
 
+    // structure for sigCommand
     struct sigCommand {
         uint cmdNum;
-
         string cmdName;
         uint cmdScore;        
     }
 
+    // structure for employee
     struct employee {
         uint empNum;
         string empName;
         uint empScore;
     }
 
+    uint public issuedCmdScore;
+
+    // an array for significant commands
     sigCommand[] public sigCommands;
     
+    // an array for information about employees
     employee[] public employees;
+ 
+    // an array for un significant commands
+    string[] public unSigCommands;
 
-    string[] public unSigCommand;
+    // an array for vefifying group
+    string[] public verifyingGroup;
     
+    // an array for verifying score
+    uint public verifyingScore;
+    
+
     // set a significant commands 
     function setSigCmd(string memory _sigCmdName, uint _sigCmdScore) public {
         sigCommands.push(sigCommand(sigCommands.length+1 ,_sigCmdName, _sigCmdScore));
@@ -46,7 +65,7 @@ contract Command {
 
     // set an un significant commands
     function setUnSigCmd(string memory _unSigCmdName) public {
-        unSigCommand.push(_unSigCmdName);    
+        unSigCommands.push(_unSigCmdName);    
     }
 
     // get a significant commands's score
@@ -57,14 +76,28 @@ contract Command {
         require(sigCommands.length > 0);
         
         for(uint i = 0; i < sigCommands.length; i++ ) {
-               return sigCommands[_cmdNum-1].score;
+               issuedCmdScore = sigCommands[_cmdNum-1].cmdScore;
+               return issuedCmdScore;
         }
     }  
+
+    // function selectVerifyingGroup() public {}
 }
 
+// contract for verifing command (when the command is significant in system)
+/*
 contract Verify {
     // new 
     Command c = new Command();
     
+    uint public verifyingScore;
+    string[] public verifyingGroup;
+
+    verifyingGroup = 
+    function selectVerifyingGroup(c.issuedCmdScore) public {
+        c.
+    }
+    
     
 }
+*/
