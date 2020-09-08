@@ -13,20 +13,35 @@ pragma solidity >=0.4.22 < 0.7.0;
 
 contract Command {    
     
+    event issueCmd(address _issuer, uint _cmdNumber);
+
     struct sigCommand {
         uint cmdNum;
 
-        string name;
-        uint score;        
+        string cmdName;
+        uint cmdScore;        
+    }
+
+    struct employee {
+        uint empNum;
+        string empName;
+        uint empScore;
     }
 
     sigCommand[] public sigCommands;
     
+    employee[] public employees;
+
     string[] public unSigCommand;
     
     // set a significant commands 
     function setSigCmd(string memory _sigCmdName, uint _sigCmdScore) public {
         sigCommands.push(sigCommand(sigCommands.length+1 ,_sigCmdName, _sigCmdScore));
+    }
+
+    // set an employee information
+    function setEmp(string memory _empName, uint _empScore) public {
+        employees.push(employee(employees.length+1, _empName, _empScore));
     }
 
     // set an un significant commands
@@ -38,6 +53,9 @@ contract Command {
     // * -> 솔리디티 에서는 문자열 비교가 불가능하다.
     // sigCommands[0].score로 하니, 정상적으로 값이 출력됨을 알 수 있음. 
     function getSigCmd(uint _cmdNum) public returns (uint) {
+
+        require(sigCommands.length > 0);
+        
         for(uint i = 0; i < sigCommands.length; i++ ) {
                return sigCommands[_cmdNum-1].score;
         }
@@ -47,4 +65,6 @@ contract Command {
 contract Verify {
     // new 
     Command c = new Command();
+    
+    
 }
