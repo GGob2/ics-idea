@@ -21,49 +21,52 @@ contract Command {
     // event issueCmd(address _issuer, uint _cmdNumber);
     // event verifyCmd(
 
-    // structure for sigCommand
+    // 중요한 명령을 담을 구조체
     struct sigCommand {
         uint cmdNum;
         string cmdName;
         uint cmdScore;        
     }
 
-    // structure for employee
+    // 직원들의 정보를 담을 구조체
     struct employee {
         uint empNum;
         string empName;
         uint empScore;
     }
 
+    // 직원이 실행한 명령의 점수를 담을 변수
     uint public issuedCmdScore;
 
-    // an array for significant commands
+    // 중요한 명령들의 array
     sigCommand[] public sigCommands;
     
-    // an array for information about employees
+    // 직원 정보들의 array
     employee[] public employees;
  
-    // an array for un significant commands
+    // 중요하지 않은 명령들의 array
     string[] public unSigCommands;
 
-    // an array for vefifying group
+    // 검증 그룹의 array
     string[] public verifyingGroup;
-    
-    // an array for verifying score
+     
+    // 검증할 명령의 점수 * 2 
     uint public verifyingScore;
     
+    // 검증그룹에서 검증했을 때, 총 점수
+    uint public sumOfVerifyingScore;
 
-    // set a significant commands 
+    // 중요한 명령들 입력하기
     function setSigCmd(string memory _sigCmdName, uint _sigCmdScore) public {
         sigCommands.push(sigCommand(sigCommands.length+1 ,_sigCmdName, _sigCmdScore));
     }
 
-    // set an employee information
+    // 직원 정보 입력하기
     function setEmp(string memory _empName, uint _empScore) public {
         employees.push(employee(employees.length+1, _empName, _empScore));
     }
 
-    // set an un significant commands
+    // 중요하지 않은 명령들 입력하기 
     function setUnSigCmd(string memory _unSigCmdName) public {
         unSigCommands.push(_unSigCmdName);    
     }
@@ -71,17 +74,40 @@ contract Command {
     // get a significant commands's score
     // * -> 솔리디티 에서는 문자열 비교가 불가능하다.
     // sigCommands[0].score로 하니, 정상적으로 값이 출력됨을 알 수 있음. 
-    function getSigCmd(uint _cmdNum) public returns (uint) {
+    function issueSigCmd(uint _cmdNum, bool _sig) public returns (uint) {
 
-        require(sigCommands.length > 0);
-        
-        for(uint i = 0; i < sigCommands.length; i++ ) {
-               issuedCmdScore = sigCommands[_cmdNum-1].cmdScore;
-               return issuedCmdScore;
-        }
+        // 중요한 명령인지 판단 ?
+        if(_sig == true) {
+            require(sigCommands.length > 0);
+            
+            for(uint i = 0; i < sigCommands.length; i++ ) {
+                issuedCmdScore = sigCommands[_cmdNum-1].cmdScore;
+                return issuedCmdScore;
+            }
+       } 
+       else {
+           issuedCmdScore = 0;
+           return issuedCmdScore;
+       }
     }  
 
-    // function selectVerifyingGroup() public {}
+    // 명령 검증을 위한 function
+    function selectVerifyingGroup(uint _verifyingCmdNum) public returns (uint) {
+        require(_verifyingCmdNum > 0 && employees.length > 0);
+        
+        // 명령 번호를 받아와서 점수의 2배수만큼을 verifyingScore에 집어넣음
+        verifyingScore = (sigCommands[_verifyingCmdNum].cmdScore) * 2;
+             
+        // verifyingScore = _verifyingCmdScore * 2;
+        
+        while(sumOfVerifyingScore >= verifyingScore) {
+            for(uint j = 0; j < employees.length; j++) {
+                
+                sumOfVerifyingScore += employees[j].empScore;
+                verifyingGroup.push(employees[j].empName);
+            }
+        }
+    }
 }
 
 // contract for verifing command (when the command is significant in system)
