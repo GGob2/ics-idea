@@ -110,7 +110,7 @@ contract Command {
     }
 }
 
-// contract for verifing command (when the command is significant in system)
+// 검증을 위한 스마트컨트랙트 
 /*
 contract Verify {
     // new 
