@@ -56,6 +56,11 @@ contract Command {
     // 검증그룹에서 검증했을 때, 총 점수
     uint public sumOfVerifyingScore;
 
+    // 검증 그룹을 선정할 랜덤 넘버
+    uint public randomNum = 0;
+    
+    
+
     // 중요한 명령들 입력하기
     function setSigCmd(string memory _sigCmdName, uint _sigCmdScore) public {
         sigCommands.push(sigCommand(sigCommands.length+1 ,_sigCmdName, _sigCmdScore));
@@ -108,22 +113,9 @@ contract Command {
             }
         }
     }
-}
 
-// 검증을 위한 스마트컨트랙트 
-/*
-contract Verify {
-    // new 
-    Command c = new Command();
-    
-    uint public verifyingScore;
-    string[] public verifyingGroup;
-
-    verifyingGroup = 
-    function selectVerifyingGroup(c.issuedCmdScore) public {
-        c.
+    function random() public view returns (uint8) {
+        return uint8(uint256(keccak256(abi.encodePacked(block.timestamp, block.difficulty))) % employees.length);
     }
-    
-    
 }
-*/
+
