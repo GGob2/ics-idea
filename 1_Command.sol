@@ -11,9 +11,10 @@ pragma solidity >=0.4.22 < 0.7.0;
 
     * 현재 발견한 문제점 : solidity는 int, uint만 지원.. score 할 때 소수점 사용 못함.. --> ?
 
-      아이디어 변경 할 수 있나? --> 직원에게 스택을 쌓아서, verify 할 때 스택이 몇스택 이상 쌓이면 추가적으로 점수를 쳐주는 식으로 생각..?
-      ex) 5점이 필요한 명령 & 10점의 검증 그룹 선정 || 검증 그룹 중, 스택이 1스택 이상 있는 사람이 4명 & 추가점수 부여 조건 :
-          스택이 1스택 이상인 사람이 3명이상 검증했을 경우 전체 verify 과정에 1점 부여...?
+      아이디어 변경: 직원 검증 신뢰도 도입.
+      검증 그룹에 속한 직원은 명령이 실행된 다음, 피드백에 의해 정상적인 검증 / 비정상적인 검증 으로 분류됨.
+      정상적으로 검증했으면 직원 검증 신뢰도 1점 부여, 비정상적으로 검증했으면 -2점 부여
+
   */
 
 contract Command {    
@@ -71,13 +72,13 @@ contract Command {
     
 
     // 중요한 명령들 입력하기
-    function setSigCmd(string memory _sigCmdName, uint _sigCmdScore, uint _empTrustScore) public {
-        sigCommands.push(sigCommand(sigCommands.length+1 ,_sigCmdName, _sigCmdScore, _empTrustScore));
+    function setSigCmd(string memory _sigCmdName, uint _sigCmdScore) public {
+        sigCommands.push(sigCommand(sigCommands.length+1 ,_sigCmdName, _sigCmdScore));
     }
 
     // 직원 정보 입력하기
-    function setEmp(string memory _empName, uint _empScore) public {
-        employees.push(employee(employees.length+1, _empName, _empScore));
+    function setEmp(string memory _empName, uint _empScore, uint _empTrustScore) public {
+        employees.push(employee(employees.length+1, _empName, _empScore, _empTrustScore));
     }
 
     // 중요하지 않은 명령들 입력하기 
@@ -110,14 +111,16 @@ contract Command {
         require(_verifyingCmdNum > 0 && employees.length > 0);
         
         // 명령 번호를 받아와서 점수의 2배수만큼을 verifyingScore에 집어넣음
-        verifyingScore = (sigCommands[_verifyingCmdNum-1].cmdScore) * 2;
+        verifyingScore = (sigCommands[_verifyingCmdNum-1].cmdScore) * 2;   // 정상적으로 작동
              
-        // verifyingScore = _verifyingCmdScore * 2;
-        
-        while(sumOfVerifyingScore >= verifyingScore) {
+        // 4:13pm 정상적으로 작동하지 않음 - while문에 안들어감.  기존 꺽새 >=  ->  <= 로 변경
+        while(sumOfVerifyingScore <= verifyingScore) {
             for(uint j = 0; j < employees.length; j++) {
+                
+                // 랜덤 넘버가 중복되는 경우를 생각해야함.
                 randomNum = random();
-                verifyingGroup.push(employees[randomNum].empName, employees[randomNum].empTrustScore);
+
+                verifyingGroup.push(verifying(employees[randomNum].empName, employees[randomNum].empTrustScore));
                 sumOfVerifyingScore += employees[randomNum].empScore;
                 
             }
