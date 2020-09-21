@@ -97,11 +97,11 @@ contract Command {
     }  
 
     // 명령 검증을 위한 function
-    function selectVerifyingGroup(uint _verifyingCmdNum) public returns (uint) {
+    function selectVerifyingGroup(uint _verifyingCmdNum) public payable returns (uint) {
         require(_verifyingCmdNum > 0 && employees.length > 0);
         
         // 명령 번호를 받아와서 점수의 2배수만큼을 verifyingScore에 집어넣음
-        verifyingScore = (sigCommands[_verifyingCmdNum].cmdScore) * 2;
+        verifyingScore = (sigCommands[_verifyingCmdNum-1].cmdScore) * 2;
              
         // verifyingScore = _verifyingCmdScore * 2;
         
