@@ -33,6 +33,13 @@ contract Command {
         uint empNum;
         string empName;
         uint empScore;
+        uint empTrustScore;
+    }
+
+    // 검증그룹에서 직원들의 이름과 trust score
+    struct verifying{
+        string verifyingGroupEmpName;
+        uint verifyingTrustScore;
     }
 
     // 직원이 실행한 명령의 점수를 담을 변수
@@ -44,11 +51,13 @@ contract Command {
     // 직원 정보들의 array
     employee[] public employees;
  
+    // 검증 그룹의 array
+    verifying[] public verifyingGroup;
+
     // 중요하지 않은 명령들의 array
     string[] public unSigCommands;
 
-    // 검증 그룹의 array
-    string[] public verifyingGroup;
+    
      
     // 검증할 명령의 점수 * 2 
     uint public verifyingScore;
@@ -62,8 +71,8 @@ contract Command {
     
 
     // 중요한 명령들 입력하기
-    function setSigCmd(string memory _sigCmdName, uint _sigCmdScore) public {
-        sigCommands.push(sigCommand(sigCommands.length+1 ,_sigCmdName, _sigCmdScore));
+    function setSigCmd(string memory _sigCmdName, uint _sigCmdScore, uint _empTrustScore) public {
+        sigCommands.push(sigCommand(sigCommands.length+1 ,_sigCmdName, _sigCmdScore, _empTrustScore));
     }
 
     // 직원 정보 입력하기
@@ -107,9 +116,10 @@ contract Command {
         
         while(sumOfVerifyingScore >= verifyingScore) {
             for(uint j = 0; j < employees.length; j++) {
+                randomNum = random();
+                verifyingGroup.push(employees[randomNum].empName, employees[randomNum].empTrustScore);
+                sumOfVerifyingScore += employees[randomNum].empScore;
                 
-                sumOfVerifyingScore += employees[j].empScore;
-                verifyingGroup.push(employees[j].empName);
             }
         }
     }
