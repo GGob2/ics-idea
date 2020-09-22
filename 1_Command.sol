@@ -79,7 +79,7 @@ contract Command {
     bool public trustScoreAdapted = false;
 
     // 실제로 검증에 참여한 사람들의 번호
-    uint[] public candidatedVerifyEmplist;
+    uint[] public candidatedList;
 
 
     // 중요한 명령들 입력하기
@@ -138,7 +138,7 @@ contract Command {
                 randomNum = random();
                 verifyingGroup.push(verifying(employees[randomNum].empName, employees[randomNum].empTrustScore));
                 sumOfVerifyingScore += employees[randomNum].empScore;
-                candidateVerifyingEmplist.push(randomNum);
+                candidatedList.push(randomNum);
                 randomNum = random();
             }
         }
@@ -158,15 +158,15 @@ contract Command {
     }
 
     // 명령 실행 결과에 따라 직원 검증 신뢰도에 +1 or -2 적용 함수
-    function trustScoreFeedback(bool _excutedWell) public payable {
+    function trustScoreFeedback(bool _executedWell) public payable {
         if(_executedWell == true) {
-            for(uint _i = 0; _i < candidateVerifyingEmplist.length; _i++) {
-                employees[candidateVerifyingEmplist[_i]].empTrustScore += 1;
+            for(uint g = 0; g < candidatedList.length; g++) {
+                employees[candidatedList[g]].empTrustScore += 1;
             }
         }
-        else if(_executedWell == false) {
-            for(uint _i = 0; _i < candidateVerifyingEmplist.length; _i++) {
-                employees[candidateVerifyingEmplist[_i]].empTrustScore -= 2;
+        else {
+            for(uint t = 0; g < candidatedList.length; g++) {
+                employees[candidatedList[g]].empTrustScore -= 2;
             }
         }
     }
