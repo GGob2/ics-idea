@@ -15,6 +15,8 @@ pragma solidity >=0.4.22 < 0.7.0;
       검증 그룹에 속한 직원은 명령이 실행된 다음, 피드백에 의해 정상적인 검증 / 비정상적인 검증 으로 분류됨.
       정상적으로 검증했으면 직원 검증 신뢰도 1점 부여, 비정상적으로 검증했으면 -2점 부여
 
+    09/22 발견 문제점: for문 속에서 random 값이 바뀌지 않는다. 이유 --> ? 너무 빨리 for문이 돌아버리기 때문..
+
   */
 
 contract Command {    
@@ -58,7 +60,6 @@ contract Command {
     // 중요하지 않은 명령들의 array
     string[] public unSigCommands;
 
-     
     // 검증할 명령의 점수 * 2 
     uint public verifyingScore;
     
@@ -76,20 +77,28 @@ contract Command {
 
     // TrustScore로 검증 과정에 점수가 더해졌는지 확인
     bool public trustScoreAdapted = false;
+
+    // 실제로 검증에 참여한 사람들의 번호
+    uint[] public candidatedVerifyEmplist;
+
+
     // 중요한 명령들 입력하기
     function setSigCmd(string memory _sigCmdName, uint _sigCmdScore) public {
         sigCommands.push(sigCommand(sigCommands.length+1 ,_sigCmdName, _sigCmdScore));
     }
+
 
     // 직원 정보 입력하기
     function setEmp(string memory _empName, uint _empScore, uint _empTrustScore) public {
         employees.push(employee(employees.length+1, _empName, _empScore, _empTrustScore));
     }
 
+
     // 중요하지 않은 명령들 입력하기 
     function setUnSigCmd(string memory _unSigCmdName) public {
         unSigCommands.push(_unSigCmdName);    
     }
+
 
     // get a significant commands's score
     // * -> 솔리디티 에서는 문자열 비교가 불가능하다.
@@ -111,37 +120,58 @@ contract Command {
        }
     }  
 
-    // 명령 검증을 위한 function
+
+    // 명령 검증을 위해 검증 그룹을 형성하는 function
     function selectVerifyingGroup(uint _verifyingCmdNum) public payable returns (uint) {
         require(_verifyingCmdNum > 0 && employees.length > 0);
         
         // 명령 번호를 받아와서 점수의 2배수만큼을 verifyingScore에 집어넣음
         verifyingScore = (sigCommands[_verifyingCmdNum-1].cmdScore) * 2;   // 정상적으로 작동
-             
-        // 4:13pm 정상적으로 작동하지 않음 - while문에 안들어감.  기존 꺽새 >=  ->  <= 로 변경
-        while(sumOfVerifyingScore <= verifyingScore) {
-            for(uint j = 0; j < employees.length; j++) {
-                
-                // 랜덤 넘버가 중복되는 경우를 생각해야함.
-                randomNum = random();
 
+        // 랜덤 넘버가 중복되는 경우를 생각해야함.
+        for(uint j = 0; j < employees.length; j++) {
+            if (sumOfVerifyingScore >= verifyingScore) {
+                break;
+            }
+             
+            else {
+                randomNum = random();
                 verifyingGroup.push(verifying(employees[randomNum].empName, employees[randomNum].empTrustScore));
                 sumOfVerifyingScore += employees[randomNum].empScore;
-                employess.pop(randomNum);
+                candidateVerifyingEmplist.push(randomNum);
+                randomNum = random();
+            }
+        }
+        
+    }
+
+    // 검증 그룹이 명령을 검증하는 function
+    function verify(uint __empNum) public payable returns (uint) {
+        verifyingGroupScore += employees[__empNum].empScore;
+        verifyingGroupTrustScore += employees[__empNum].empTrustScore;
+
+        if(verifyingGroupTrustScore >= verifyingScore && trustScoreAdapted == false) {
+            verifyingGroupScore += 1;
+            trustScoreAdapted = true;
+        }
+        return 0;
+    }
+
+    // 명령 실행 결과에 따라 직원 검증 신뢰도에 +1 or -2 적용 함수
+    function trustScoreFeedback(bool _excutedWell) public payable {
+        if(_executedWell == true) {
+            for(uint _i = 0; _i < candidateVerifyingEmplist.length; _i++) {
+                employees[candidateVerifyingEmplist[_i]].empTrustScore += 1;
+            }
+        }
+        else if(_executedWell == false) {
+            for(uint _i = 0; _i < candidateVerifyingEmplist.length; _i++) {
+                employees[candidateVerifyingEmplist[_i]].empTrustScore -= 2;
             }
         }
     }
 
-    function verifying(uint _empNum) public payable {
-        verifyingGroupScore += employees[_empNum].empScore;
-        verifyingGroupTrustScore += employees[_empNum].empTrustScore;
-
-        if(verifyingGroupTrustScore >= verifyingScore && trustScoreAdapted == false) {
-            verifyingGroupScore += 1
-            trustScoreAdapted = true;
-        }
-    }
-
+    // 랜덤 숫자를 구하는 함수
     function random() public view returns (uint8) {
         return uint8(uint256(keccak256(abi.encodePacked(block.timestamp, block.difficulty))) % employees.length);
     }
