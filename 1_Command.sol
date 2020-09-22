@@ -58,7 +58,6 @@ contract Command {
     // 중요하지 않은 명령들의 array
     string[] public unSigCommands;
 
-    
      
     // 검증할 명령의 점수 * 2 
     uint public verifyingScore;
@@ -69,8 +68,14 @@ contract Command {
     // 검증 그룹을 선정할 랜덤 넘버
     uint public randomNum = 0;
     
-    
+    // 검증 과정에서 사용하는 검증 점수
+    uint public verifyingGroupScore = 0;    
 
+    // 검증 과정에서 사용하는 직원 검증 신뢰도
+    uint public verifyingGroupTrustScore = 0;
+
+    // TrustScore로 검증 과정에 점수가 더해졌는지 확인
+    bool public trustScoreAdapted = false;
     // 중요한 명령들 입력하기
     function setSigCmd(string memory _sigCmdName, uint _sigCmdScore) public {
         sigCommands.push(sigCommand(sigCommands.length+1 ,_sigCmdName, _sigCmdScore));
@@ -122,8 +127,18 @@ contract Command {
 
                 verifyingGroup.push(verifying(employees[randomNum].empName, employees[randomNum].empTrustScore));
                 sumOfVerifyingScore += employees[randomNum].empScore;
-                
+                employess.pop(randomNum);
             }
+        }
+    }
+
+    function verifying(uint _empNum) public payable {
+        verifyingGroupScore += employees[_empNum].empScore;
+        verifyingGroupTrustScore += employees[_empNum].empTrustScore;
+
+        if(verifyingGroupTrustScore >= verifyingScore && trustScoreAdapted == false) {
+            verifyingGroupScore += 1
+            trustScoreAdapted = true;
         }
     }
 
