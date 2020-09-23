@@ -136,6 +136,7 @@ contract Command {
              
             else {
                 randomNum = random();
+                
                 verifyingGroup.push(verifying(employees[randomNum].empName, employees[randomNum].empTrustScore));
                 sumOfVerifyingScore += employees[randomNum].empScore;
                 candidatedList.push(randomNum);
