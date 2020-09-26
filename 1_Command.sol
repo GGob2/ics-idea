@@ -135,12 +135,12 @@ contract Command {
             }
              
             else {
-                randomNum = random();
+                
                 
                 verifyingGroup.push(verifying(employees[randomNum].empName, employees[randomNum].empTrustScore));
                 sumOfVerifyingScore += employees[randomNum].empScore;
                 candidatedList.push(randomNum);
-                randomNum = random();
+                
             }
         }
         
@@ -166,7 +166,7 @@ contract Command {
             }
         }
         else {
-            for(uint t = 0; g < candidatedList.length; g++) {
+            for(uint t = 0; t < candidatedList.length; t++) {
                 employees[candidatedList[g]].empTrustScore -= 2;
             }
         }
