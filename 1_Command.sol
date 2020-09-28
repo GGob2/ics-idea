@@ -80,6 +80,13 @@ contract Command {
 
     // 실제로 검증에 참여한 사람들의 번호
     uint[] public candidatedList;
+    
+    // 무작위 수가 들어가있는 리스트
+    uint[] public randomNumList;
+
+    // 검증 그룹에 속해있는지 확인하는 변수
+    bool public existed = false;
+
 
 
     // 중요한 명령들 입력하기
@@ -122,6 +129,7 @@ contract Command {
 
 
     // 명령 검증을 위해 검증 그룹을 형성하는 function
+    // random() 함수를 먼저 한번 실행해야 함
     function selectVerifyingGroup(uint _verifyingCmdNum) public payable returns (uint) {
         require(_verifyingCmdNum > 0 && employees.length > 0);
         
@@ -133,14 +141,10 @@ contract Command {
             if (sumOfVerifyingScore >= verifyingScore) {
                 break;
             }
-             
             else {
-                
-                
-                verifyingGroup.push(verifying(employees[randomNum].empName, employees[randomNum].empTrustScore));
-                sumOfVerifyingScore += employees[randomNum].empScore;
-                candidatedList.push(randomNum);
-                
+                verifyingGroup.push(verifying(employees[randomNumList[j]].empName, employees[randomNumList[j]].empTrustScore));
+                sumOfVerifyingScore += employees[randomNumList[j]].empScore;
+                candidatedList.push(randomNumList[j]);        
             }
         }
         
@@ -173,8 +177,37 @@ contract Command {
     }
 
     // 랜덤 숫자를 구하는 함수
-    function random() public view returns (uint8) {
-        return uint8(uint256(keccak256(abi.encodePacked(block.timestamp, block.difficulty))) % employees.length);
+    function random() public  {
+        // employees.length == 10 가정
+        for(uint i = 0; i < 10; i++) {
+            
+            // randomNum = uint8(uint256(keccak256(abi.encodePacked(block.timestamp+i, block.difficulty-i))) % 10);
+            
+            existed = false;
+            
+            exam(uint8(uint256(keccak256(abi.encodePacked(block.timestamp+i, block.difficulty+i))) % 10));
+            
+            if(existed == true){
+                continue;
+            }
+            
+            if(existed == false) {
+                randomNumList.push(uint8(uint256(keccak256(abi.encodePacked(block.timestamp+i, block.difficulty+i))) % 10));
+            }
+        }
+    }
+    
+    //검증 그룹에 해당 직원이 속해있는지 확인하는 함수
+    function exam(uint _randomNum) public  {
+        for(uint j = 0; j < randomNumList.length; j++) {
+            if(randomNumList[j] == _randomNum){
+                existed = true;
+                break;
+            } else {
+                existed = false;
+                
+            }
+        }
     }
 }
 
