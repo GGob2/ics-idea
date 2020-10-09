@@ -17,6 +17,10 @@ pragma solidity >=0.4.22 < 0.7.0;
 
     09/22 발견 문제점: for문 속에서 random 값이 바뀌지 않는다. 이유 --> ? 너무 빨리 for문이 돌아버리기 때문..
 
+    10/09 발견 문제점: 명령을 내린사람은 검증그룹에 포함되서는 안됨.
+
+    
+
   */
 
 contract Command {    
@@ -88,7 +92,6 @@ contract Command {
     bool public existed = false;
 
 
-
     // 중요한 명령들 입력하기
     function setSigCmd(string memory _sigCmdName, uint _sigCmdScore) public {
         sigCommands.push(sigCommand(sigCommands.length+1 ,_sigCmdName, _sigCmdScore));
@@ -150,6 +153,7 @@ contract Command {
         
     }
 
+
     // 검증 그룹이 명령을 검증하는 function
     function verify(uint __empNum) public payable returns (uint) {
         verifyingGroupScore += employees[__empNum].empScore;
@@ -161,6 +165,7 @@ contract Command {
         }
         return 0;
     }
+
 
     // 명령 실행 결과에 따라 직원 검증 신뢰도에 +1 or -2 적용 함수
     function trustScoreFeedback(bool _executedWell) public payable {
@@ -175,6 +180,7 @@ contract Command {
             }
         }
     }
+
 
     // 랜덤 숫자를 구하는 함수
     function random() public  {
@@ -197,6 +203,7 @@ contract Command {
         }
     }
     
+
     //검증 그룹에 해당 직원이 속해있는지 확인하는 함수
     function exam(uint _randomNum) public  {
         for(uint j = 0; j < randomNumList.length; j++) {
