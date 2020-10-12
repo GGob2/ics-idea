@@ -122,6 +122,8 @@ contract Command {
     // * -> 솔리디티 에서는 문자열 비교가 불가능하다.
     // sigCommands[0].score로 하니, 정상적으로 값이 출력됨을 알 수 있음. 
     function issueSigCmd(uint _cmdNum, bool _sig, uint _empNum) public returns (uint) {
+        
+        empIssuedCmd = _empNum;
 
         // 중요한 명령인지 판단 ?
         if(_sig == true) {
@@ -134,7 +136,7 @@ contract Command {
            issuedCmdScore = 0;
            return issuedCmdScore;
        }
-       empIssuedCmd = _empNum;
+       
     }  
 
 
@@ -162,7 +164,7 @@ contract Command {
 
 
     // 검증 그룹이 명령을 검증하는 function --> 검증 그룹의 index로 검증.
-    function verify(uint __empNum) public payable returns (uint) {
+    function verify(uint __empNum) public payable returns (bool) {
         verifyingGroupScore += verifyingGroup[__empNum].verifyingEmpScore;
         verifyingGroupTrustScore += verifyingGroup[__empNum].verifyingTrustScore;
 
@@ -170,7 +172,13 @@ contract Command {
             verifyingGroupScore += 1;
             trustScoreAdapted = true;
         }
-        return 0;
+
+        if(verifyingGroupScore >= verifyingScore) {
+            return true;
+        } else {
+            return false;
+        }
+        
     }
 
 
@@ -224,13 +232,11 @@ contract Command {
         }
     }
 
+    /*
     // 해당 명령어 김증되었는지 확인하는 함수
     function isVerified() public view returns(bool) {
-        if(verifyingGroupScore >= verifyingScore) {
-            return true;
-        } else {
-            return false;
-        }
+        
     }
+    */
 }
 

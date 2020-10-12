@@ -31,6 +31,7 @@ contract Command {
     // 검증그룹에서 직원들의 이름과 trust score
     struct verifying{
         string verifyingGroupEmpName;
+        uint verifyingEmpScore;
     }
 
     // 직원이 실행한 명령의 점수를 담을 변수
@@ -85,8 +86,8 @@ contract Command {
 
 
     // 직원 정보 입력하기
-    function setEmp(string memory _empName, uint _empScore, uint _empTrustScore) public {
-        employees.push(employee(employees.length+1, _empName, _empScore, _empTrustScore));
+    function setEmp(string memory _empName, uint _empScore) public {
+        employees.push(employee(employees.length+1, _empName, _empScore));
     }
 
 
@@ -131,8 +132,8 @@ contract Command {
                 break;
             }
             else {
-                verifyingGroup.push(verifying(employees[randomNumList[j]].empName));
-                sumOfVerifyingScore += employees[randomNumList[j]].empScore;
+                verifyingGroup.push(verifying(employees[j].empName, employees[j].empScore));
+                sumOfVerifyingScore += employees[j].empScore;
                 candidatedList.push(randomNumList[j]);        
             }
         }
@@ -141,15 +142,14 @@ contract Command {
 
 
     // 검증 그룹이 명령을 검증하는 function
-    function verify(uint __empNum) public payable returns (uint) {
-        verifyingGroupScore += employees[__empNum].empScore;
-        verifyingGroupTrustScore += employees[__empNum].empTrustScore;
-
-        if(verifyingGroupTrustScore >= verifyingScore && trustScoreAdapted == false) {
-            verifyingGroupScore += 1;
-            trustScoreAdapted = true;
+    function verify(uint __empNum) public payable returns (bool) {
+        verifyingGroupScore += verifyingGroup[__empNum].verifyingEmpScore;
+        
+        if(verifyingGroupScore >= verifyingScore) {
+            return true;
+        } else {
+            return false;
         }
-        return 0;
     }
 
 
@@ -204,15 +204,12 @@ contract Command {
             }
         }
     }
-*/
+
 
     // 해당 명령어 김증되었는지 확인하는 함수
     function isVerified() public returns(bool) {
-        if(verifyingGroup >= verifyingScore) {
-            return true;
-        } else {
-            return false;
-        }
+        
     }
+*/
 }
 
