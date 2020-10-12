@@ -91,6 +91,8 @@ contract Command {
     // 검증 그룹에 속해있는지 확인하는 변수
     bool public existed = false;
 
+    // 검증이 완료되었는지 확인하기 위한 변수
+    bool public isVerified = false;
 
     // 중요한 명령들 입력하기
     function setSigCmd(string memory _sigCmdName, uint _sigCmdScore) public {
@@ -214,6 +216,15 @@ contract Command {
                 existed = false;
                 
             }
+        }
+    }
+
+    // 해당 명령어 김증되었는지 확인하는 함수
+    function isVerified() public returns(bool) {
+        if(verifyingGroup >= verifyingScore) {
+            return true;
+        } else {
+            return false;
         }
     }
 }
