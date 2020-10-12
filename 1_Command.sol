@@ -19,7 +19,8 @@ pragma solidity >=0.4.22 < 0.7.0;
 
     10/09 발견 문제점: 명령을 내린사람은 검증그룹에 포함되서는 안됨.
 
-    
+    10/13 발견 문제점: 검증 과정에서 검증그룹의 정보를 가져오는 것이 아니라, employees의 정보를 가져옴.. 
+                       --> 검증그룹을 선정할 때, Employees의 정보들을 같이 가져온다.
 
   */
 
@@ -46,6 +47,7 @@ contract Command {
     // 검증그룹에서 직원들의 이름과 trust score
     struct verifying{
         string verifyingGroupEmpName;
+        uint verifyingEmpScore;
         uint verifyingTrustScore;
     }
 
@@ -92,7 +94,11 @@ contract Command {
     bool public existed = false;
 
     // 검증이 완료되었는지 확인하기 위한 변수
-    bool public isVerified = false;
+    bool public isCmdVerified = false;
+
+    // 명령을 내린 직원
+    uint public empIssuedCmd;
+
 
     // 중요한 명령들 입력하기
     function setSigCmd(string memory _sigCmdName, uint _sigCmdScore) public {
@@ -115,21 +121,20 @@ contract Command {
     // get a significant commands's score
     // * -> 솔리디티 에서는 문자열 비교가 불가능하다.
     // sigCommands[0].score로 하니, 정상적으로 값이 출력됨을 알 수 있음. 
-    function issueSigCmd(uint _cmdNum, bool _sig) public returns (uint) {
+    function issueSigCmd(uint _cmdNum, bool _sig, uint _empNum) public returns (uint) {
 
         // 중요한 명령인지 판단 ?
         if(_sig == true) {
             require(sigCommands.length > 0);
+            issuedCmdScore = sigCommands[_cmdNum-1].cmdScore;
+            return issuedCmdScore;
             
-            for(uint i = 0; i < sigCommands.length; i++ ) {
-                issuedCmdScore = sigCommands[_cmdNum-1].cmdScore;
-                return issuedCmdScore;
-            }
        } 
        else {
            issuedCmdScore = 0;
            return issuedCmdScore;
        }
+       empIssuedCmd = _empNum;
     }  
 
 
@@ -147,7 +152,7 @@ contract Command {
                 break;
             }
             else {
-                verifyingGroup.push(verifying(employees[randomNumList[j]].empName, employees[randomNumList[j]].empTrustScore));
+                verifyingGroup.push(verifying(employees[randomNumList[j]].empName, employees[randomNumList[j]].empScore, employees[randomNumList[j]].empTrustScore));
                 sumOfVerifyingScore += employees[randomNumList[j]].empScore;
                 candidatedList.push(randomNumList[j]);        
             }
@@ -156,10 +161,10 @@ contract Command {
     }
 
 
-    // 검증 그룹이 명령을 검증하는 function
+    // 검증 그룹이 명령을 검증하는 function --> 검증 그룹의 index로 검증.
     function verify(uint __empNum) public payable returns (uint) {
-        verifyingGroupScore += employees[__empNum].empScore;
-        verifyingGroupTrustScore += employees[__empNum].empTrustScore;
+        verifyingGroupScore += verifyingGroup[__empNum].verifyingEmpScore;
+        verifyingGroupTrustScore += verifyingGroup[__empNum].verifyingTrustScore;
 
         if(verifyingGroupTrustScore >= verifyingScore && trustScoreAdapted == false) {
             verifyingGroupScore += 1;
@@ -178,7 +183,7 @@ contract Command {
         }
         else {
             for(uint t = 0; t < candidatedList.length; t++) {
-                employees[candidatedList[g]].empTrustScore -= 2;
+                employees[candidatedList[t]].empTrustScore -= 2;
             }
         }
     }
@@ -220,8 +225,8 @@ contract Command {
     }
 
     // 해당 명령어 김증되었는지 확인하는 함수
-    function isVerified() public returns(bool) {
-        if(verifyingGroup >= verifyingScore) {
+    function isVerified() public view returns(bool) {
+        if(verifyingGroupScore >= verifyingScore) {
             return true;
         } else {
             return false;

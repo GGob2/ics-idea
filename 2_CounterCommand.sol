@@ -31,7 +31,6 @@ contract Command {
     // 검증그룹에서 직원들의 이름과 trust score
     struct verifying{
         string verifyingGroupEmpName;
-        
     }
 
     // 직원이 실행한 명령의 점수를 담을 변수
