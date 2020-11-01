@@ -9,8 +9,11 @@ pragma solidity >=0.4.22 < 0.7.0;
     3. 검증그룹 선정 과정 없이 employees에게 검증 요청
     4. employees 순서대로 검증
     5. 끝.
-
+    
+    11/01. 명령을 내리면 --> 명령을 내린 직원을 제외하고 
+        employees에게 검증 요청 --> 아무나 검증해서 명령 점수를 만족하면 --> 명령 수행  
   */
+
 
 contract Command {    
     
@@ -28,12 +31,6 @@ contract Command {
         uint empScore;
     }
 
-    // 검증그룹에서 직원들의 이름과 trust score
-    struct verifying{
-        string verifyingGroupEmpName;
-        uint verifyingEmpScore;
-    }
-
     // 직원이 실행한 명령의 점수를 담을 변수
     uint public issuedCmdScore;
 
@@ -42,42 +39,16 @@ contract Command {
     
     // 직원 정보들의 array
     employee[] public employees;
- 
-    // 검증 그룹의 array
-    verifying[] public verifyingGroup;
 
     // 중요하지 않은 명령들의 array
     string[] public unSigCommands;
 
     // 검증할 명령의 점수 * 2 
     uint public verifyingScore;
-    
-    // 검증그룹에서 검증했을 때, 총 점수
-    uint public sumOfVerifyingScore;
 
-    // 검증 그룹을 선정할 랜덤 넘버
-    uint public randomNum = 0;
-    
-    // 검증 과정에서 사용하는 검증 점수
-    uint public verifyingGroupScore = 0;    
+    // 명령을 내린 직원
+    uint public empIssuedCmd;
 
-    // 검증 과정에서 사용하는 직원 검증 신뢰도
-    uint public verifyingGroupTrustScore = 0;
-
-    // TrustScore로 검증 과정에 점수가 더해졌는지 확인
-    bool public trustScoreAdapted = false;
-
-    // 실제로 검증에 참여한 사람들의 번호
-    uint[] public candidatedList;
-    
-    // 무작위 수가 들어가있는 리스트
-    uint[] public randomNumList;
-
-    // 검증 그룹에 속해있는지 확인하는 변수
-    bool public existed = false;
-
-    // 검증이 완료되었는지 확인하기 위한 변수
-    bool public isVerified = false;
 
     // 중요한 명령들 입력하기
     function setSigCmd(string memory _sigCmdName, uint _sigCmdScore) public {
@@ -100,20 +71,19 @@ contract Command {
     // get a significant commands's score
     // * -> 솔리디티 에서는 문자열 비교가 불가능하다.
     // sigCommands[0].score로 하니, 정상적으로 값이 출력됨을 알 수 있음. 
-    function issueSigCmd(uint _cmdNum, bool _sig) public returns (uint) {
+    function issueSigCmd(uint _cmdNum, bool _sig, uint _empNum) public returns (uint) {
+        
+        empIssuedCmd = _empNum;
 
         // 중요한 명령인지 판단 ?
         if(_sig == true) {
             require(sigCommands.length > 0);
-            
-            for(uint i = 0; i < sigCommands.length; i++ ) {
-                issuedCmdScore = sigCommands[_cmdNum-1].cmdScore;
-                return issuedCmdScore;
-            }
+            issuedCmdScore = sigCommands[_cmdNum-1].cmdScore;
+            return issuedCmdScore;
        } 
        else {
            issuedCmdScore = 0;
-           return issuedCmdScore;
+        //    return issuedCmdScore;
        }
     }  
 
