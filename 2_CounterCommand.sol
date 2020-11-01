@@ -43,13 +43,13 @@ contract Command {
     // 중요하지 않은 명령들의 array
     string[] public unSigCommands;
 
-    // 검증할 명령의 점수 * 2 
+    // 검증할 명령의 점수 
     uint public verifyingScore;
 
     // 명령을 내린 직원
     uint public issuingCmdEmp;
     
-    
+    // 명령이 검증 되었는지 확인
     bool public isCmdVerified;
 
 
@@ -69,6 +69,7 @@ contract Command {
     // 중요하지 않은 명령들 입력하기 
     function setUnSigCmd(string memory _unSigCmdName) public {
         unSigCommands.push(_unSigCmdName);    
+
     }
 
 
@@ -92,14 +93,12 @@ contract Command {
     }  
 
 
-
-
     // 검증 그룹이 명령을 검증하는 function
     function verify(uint __empNum) public payable returns (bool) {
         
         require(__empNum != issuingCmdEmp);
         
-        verifyingScore += employees[__empNum].empScore;
+        verifyingScore += employees[__empNum-1].empScore;
         
         
         if(verifyingScore >= issuedCmdScore) {
@@ -111,13 +110,5 @@ contract Command {
         return isCmdVerified;
     }
 
-
-/*
-    
-    // 해당 명령어 김증되었는지 확인하는 함수
-    function isVerified() public returns(bool) {
-        
-    }
-*/
 }
 
