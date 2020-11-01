@@ -47,7 +47,11 @@ contract Command {
     uint public verifyingScore;
 
     // 명령을 내린 직원
-    uint public empIssuedCmd;
+    uint public issuingCmdEmp;
+    
+    
+    bool public isCmdVerified;
+
 
 
     // 중요한 명령들 입력하기
@@ -71,111 +75,45 @@ contract Command {
     // get a significant commands's score
     // * -> 솔리디티 에서는 문자열 비교가 불가능하다.
     // sigCommands[0].score로 하니, 정상적으로 값이 출력됨을 알 수 있음. 
-    function issueSigCmd(uint _cmdNum, bool _sig, uint _empNum) public returns (uint) {
+    function issueSigCmd(uint _cmdNum, bool _sig, uint _empNum) public {
         
-        empIssuedCmd = _empNum;
+        issuingCmdEmp = _empNum;
 
         // 중요한 명령인지 판단 ?
         if(_sig == true) {
             require(sigCommands.length > 0);
             issuedCmdScore = sigCommands[_cmdNum-1].cmdScore;
-            return issuedCmdScore;
+            
        } 
        else {
            issuedCmdScore = 0;
-        //    return issuedCmdScore;
        }
+
     }  
 
 
-    // 명령 검증을 위해 검증 그룹을 형성하는 function
-    // random() 함수를 먼저 한번 실행해야 함
-    function selectVerifyingGroup(uint _verifyingCmdNum) public payable returns (uint) {
-        require(_verifyingCmdNum > 0 && employees.length > 0);
-        
-        // 명령 번호를 받아와서 점수의 2배수만큼을 verifyingScore에 집어넣음
-        verifyingScore = (sigCommands[_verifyingCmdNum-1].cmdScore) * 2;   // 정상적으로 작동
-
-        // 랜덤 넘버가 중복되는 경우를 생각해야함.
-        for(uint j = 0; j < employees.length; j++) {
-            if (sumOfVerifyingScore >= verifyingScore) {
-                break;
-            }
-            else {
-                verifyingGroup.push(verifying(employees[j].empName, employees[j].empScore));
-                sumOfVerifyingScore += employees[j].empScore;
-                candidatedList.push(randomNumList[j]);        
-            }
-        }
-        
-    }
 
 
     // 검증 그룹이 명령을 검증하는 function
     function verify(uint __empNum) public payable returns (bool) {
-        verifyingGroupScore += verifyingGroup[__empNum].verifyingEmpScore;
         
-        if(verifyingGroupScore >= verifyingScore) {
-            return true;
+        require(__empNum != issuingCmdEmp);
+        
+        verifyingScore += employees[__empNum].empScore;
+        
+        
+        if(verifyingScore >= issuedCmdScore) {
+            isCmdVerified = true;
         } else {
-            return false;
+            isCmdVerified = false;
         }
+        
+        return isCmdVerified;
     }
 
 
 /*
-    // 명령 실행 결과에 따라 직원 검증 신뢰도에 +1 or -2 적용 함수
-    function trustScoreFeedback(bool _executedWell) public payable {
-        if(_executedWell == true) {
-            for(uint g = 0; g < candidatedList.length; g++) {
-                employees[candidatedList[g]].empTrustScore += 1;
-            }
-        }
-        else {
-            for(uint t = 0; t < candidatedList.length; t++) {
-                employees[candidatedList[g]].empTrustScore -= 2;
-            }
-        }
-    }
-
-
-
-    // 랜덤 숫자를 구하는 함수
-    function random() public  {
-        // employees.length == 10 가정
-        for(uint i = 0; i < 10; i++) {
-            
-            // randomNum = uint8(uint256(keccak256(abi.encodePacked(block.timestamp+i, block.difficulty-i))) % 10);
-            
-            existed = false;
-            
-            exam(uint8(uint256(keccak256(abi.encodePacked(block.timestamp+i, block.difficulty+i))) % 10));
-            
-            if(existed == true){
-                continue;
-            }
-            
-            if(existed == false) {
-                randomNumList.push(uint8(uint256(keccak256(abi.encodePacked(block.timestamp+i, block.difficulty+i))) % 10));
-            }
-        }
-    }
     
-
-    //검증 그룹에 해당 직원이 속해있는지 확인하는 함수
-    function exam(uint _randomNum) public  {
-        for(uint j = 0; j < randomNumList.length; j++) {
-            if(randomNumList[j] == _randomNum){
-                existed = true;
-                break;
-            } else {
-                existed = false;
-                
-            }
-        }
-    }
-
-
     // 해당 명령어 김증되었는지 확인하는 함수
     function isVerified() public returns(bool) {
         
