@@ -21,13 +21,12 @@ pragma solidity >=0.4.22 < 0.7.0;
 
     10/13 발견 문제점: 검증 과정에서 검증그룹의 정보를 가져오는 것이 아니라, employees의 정보를 가져옴.. 
                        --> 검증그룹을 선정할 때, Employees의 정보들을 같이 가져온다.
+    
+    11/2 발견 문제점: randomList가 employees의 길이만큼 생성되어야 하는데 (검증그룹 선정 중) 그렇지 못함..
 
   */
 
 contract Command {    
-    
-    // event issueCmd(address _issuer, uint _cmdNumber);
-    // event verifyCmd(
 
     // 중요한 명령을 담을 구조체
     struct sigCommand {
@@ -72,8 +71,8 @@ contract Command {
     // 검증그룹에서 검증했을 때, 총 점수
     uint public sumOfVerifyingScore;
 
-    // 검증 그룹을 선정할 랜덤 넘버
-    uint public randomNum = 0;
+    // 검증 그룹을 선정할 랜덤 넘버 --> nonUse
+    // uint public randomNum = 0;
     
     // 검증 과정에서 사용하는 검증 점수
     uint public verifyingGroupScore = 0;    
@@ -101,14 +100,27 @@ contract Command {
 
 
     // 중요한 명령들 입력하기
-    function setSigCmd(string memory _sigCmdName, uint _sigCmdScore) public {
-        sigCommands.push(sigCommand(sigCommands.length+1 ,_sigCmdName, _sigCmdScore));
+   function setSigCmd() public {
+        sigCommands.push(sigCommand(sigCommands.length+1 , "명령1", 3));
+        sigCommands.push(sigCommand(sigCommands.length+1 , "명령2", 6));
+        sigCommands.push(sigCommand(sigCommands.length+1 , "명령3", 10));
+        sigCommands.push(sigCommand(sigCommands.length+1 , "명령4", 7));
+        sigCommands.push(sigCommand(sigCommands.length+1 , "명령5", 4));
     }
 
 
     // 직원 정보 입력하기
-    function setEmp(string memory _empName, uint _empScore, uint _empTrustScore) public {
-        employees.push(employee(employees.length+1, _empName, _empScore, _empTrustScore));
+    function setEmp() public {
+        employees.push(employee(employees.length+1, "사원1", 1, 0));
+        employees.push(employee(employees.length+1, "사원2", 2, 1));
+        employees.push(employee(employees.length+1, "대리1", 2, 2));
+        employees.push(employee(employees.length+1, "대리2", 3, 2));
+        employees.push(employee(employees.length+1, "차장1", 3, 3));
+        employees.push(employee(employees.length+1, "차장2", 4, 3));
+        employees.push(employee(employees.length+1, "과장", 5, 3));
+        employees.push(employee(employees.length+1, "팀장", 6, 5));
+        employees.push(employee(employees.length+1, "부사장", 7, 4));
+        employees.push(employee(employees.length+1, "사장", 9, 8));
     }
 
 
@@ -121,50 +133,45 @@ contract Command {
     // get a significant commands's score
     // * -> 솔리디티 에서는 문자열 비교가 불가능하다.
     // sigCommands[0].score로 하니, 정상적으로 값이 출력됨을 알 수 있음. 
-    function issueSigCmd(uint _cmdNum, bool _sig, uint _empNum) public returns (uint) {
+    function issueSigCmd(uint _cmdNum, bool _sig, uint _empNum) public  {
         
         empIssuedCmd = _empNum;
 
         // 중요한 명령인지 판단 ?
         if(_sig == true) {
             require(sigCommands.length > 0);
-            issuedCmdScore = sigCommands[_cmdNum-1].cmdScore;
-            return issuedCmdScore;
-            
+            issuedCmdScore = sigCommands[_cmdNum-1].cmdScore;            
        } 
        else {
            issuedCmdScore = 0;
-           return issuedCmdScore;
        }
-       
-    }  
 
-
-    // 명령 검증을 위해 검증 그룹을 형성하는 function
-    // random() 함수를 먼저 한번 실행해야 함
-    function selectVerifyingGroup(uint _verifyingCmdNum) public payable returns (uint) {
-        require(_verifyingCmdNum > 0 && employees.length > 0);
+       require( issuedCmdScore > 0 && employees.length > 0);
         
         // 명령 번호를 받아와서 점수의 2배수만큼을 verifyingScore에 집어넣음
-        verifyingScore = (sigCommands[_verifyingCmdNum-1].cmdScore) * 2;   // 정상적으로 작동
+        verifyingScore = issuedCmdScore * 2;   // 정상적으로 작동
 
         // 랜덤 넘버가 중복되는 경우를 생각해야함.
         for(uint j = 0; j < employees.length; j++) {
+            
+            if(randomNumList[j] == empIssuedCmd) {
+                continue;
+            }           
+            
+            verifyingGroup.push(verifying(employees[randomNumList[j]].empName, employees[randomNumList[j]].empScore, employees[randomNumList[j]].empTrustScore));
+            sumOfVerifyingScore += employees[randomNumList[j]].empScore;
+            candidatedList.push(randomNumList[j]);        
+            
             if (sumOfVerifyingScore >= verifyingScore) {
                 break;
             }
-            else {
-                verifyingGroup.push(verifying(employees[randomNumList[j]].empName, employees[randomNumList[j]].empScore, employees[randomNumList[j]].empTrustScore));
-                sumOfVerifyingScore += employees[randomNumList[j]].empScore;
-                candidatedList.push(randomNumList[j]);        
-            }
+            
         }
-        
-    }
-
+    }  
 
     // 검증 그룹이 명령을 검증하는 function --> 검증 그룹의 index로 검증.
     function verify(uint __empNum) public payable returns (bool) {
+        
         verifyingGroupScore += verifyingGroup[__empNum].verifyingEmpScore;
         verifyingGroupTrustScore += verifyingGroup[__empNum].verifyingTrustScore;
 
@@ -191,7 +198,7 @@ contract Command {
         }
         else {
             for(uint t = 0; t < candidatedList.length; t++) {
-                employees[candidatedList[t]].empTrustScore -= 2;
+                employees[candidatedList[t]].empTrustScore -= 1;
             }
         }
     }
@@ -200,7 +207,7 @@ contract Command {
     // 랜덤 숫자를 구하는 함수
     function random() public  {
         // employees.length == 10 가정
-        for(uint i = 0; i < 10; i++) {
+        for(uint i = 0; i < 50; i++) {
             
             // randomNum = uint8(uint256(keccak256(abi.encodePacked(block.timestamp+i, block.difficulty-i))) % 10);
             
@@ -214,6 +221,10 @@ contract Command {
             
             if(existed == false) {
                 randomNumList.push(uint8(uint256(keccak256(abi.encodePacked(block.timestamp+i, block.difficulty+i))) % 10));
+            }
+            
+            if(randomNumList.length >= 10){
+                break;
             }
         }
     }
@@ -231,12 +242,8 @@ contract Command {
             }
         }
     }
-
-    /*
-    // 해당 명령어 김증되었는지 확인하는 함수
-    function isVerified() public view returns(bool) {
-        
+    function returnRandomNumListLength() public view returns (uint) {
+        return randomNumList.length;
     }
-    */
 }
 

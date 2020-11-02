@@ -55,14 +55,27 @@ contract Command {
 
 
     // 중요한 명령들 입력하기
-    function setSigCmd(string memory _sigCmdName, uint _sigCmdScore) public {
-        sigCommands.push(sigCommand(sigCommands.length+1 ,_sigCmdName, _sigCmdScore));
+    function setSigCmd() public {
+        sigCommands.push(sigCommand(sigCommands.length+1 , "명령1", 3));
+        sigCommands.push(sigCommand(sigCommands.length+1 , "명령2", 6));
+        sigCommands.push(sigCommand(sigCommands.length+1 , "명령3", 10));
+        sigCommands.push(sigCommand(sigCommands.length+1 , "명령4", 7));
+        sigCommands.push(sigCommand(sigCommands.length+1 , "명령5", 4));
     }
 
 
     // 직원 정보 입력하기
-    function setEmp(string memory _empName, uint _empScore) public {
-        employees.push(employee(employees.length+1, _empName, _empScore));
+    function setEmp() public {
+        employees.push(employee(employees.length+1, "사원1", 1));
+        employees.push(employee(employees.length+1, "사원2", 2));
+        employees.push(employee(employees.length+1, "대리1", 2));
+        employees.push(employee(employees.length+1, "대리2", 3));
+        employees.push(employee(employees.length+1, "차장1", 3));
+        employees.push(employee(employees.length+1, "차장2", 4));
+        employees.push(employee(employees.length+1, "과장", 5));
+        employees.push(employee(employees.length+1, "팀장", 6));
+        employees.push(employee(employees.length+1, "부사장", 7));
+        employees.push(employee(employees.length+1, "사장", 9));
     }
 
 
@@ -91,6 +104,7 @@ contract Command {
        }
 
     }  
+
 
 
     // 검증 그룹이 명령을 검증하는 function
