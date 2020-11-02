@@ -23,7 +23,6 @@ pragma solidity >=0.4.22 < 0.7.0;
                        --> 검증그룹을 선정할 때, Employees의 정보들을 같이 가져온다.
     
     11/2 발견 문제점: randomList가 employees의 길이만큼 생성되어야 하는데 (검증그룹 선정 중) 그렇지 못함..
-                      randomNumList에서 % 11을 해버리면, 10이 들어갈 수도 있는데 괜찮은건가? 
 
   */
 
@@ -72,8 +71,8 @@ contract Command {
     // 검증그룹에서 검증했을 때, 총 점수
     uint public sumOfVerifyingScore;
 
-    // 검증 그룹을 선정할 랜덤 넘버
-    uint public randomNum = 0;
+    // 검증 그룹을 선정할 랜덤 넘버 --> nonUse
+    // uint public randomNum = 0;
     
     // 검증 과정에서 사용하는 검증 점수
     uint public verifyingGroupScore = 0;    
@@ -195,7 +194,7 @@ contract Command {
     // 랜덤 숫자를 구하는 함수
     function random() public  {
         // employees.length == 10 가정
-        for(uint i = 0; i < 20; i++) {
+        for(uint i = 0; i < 50; i++) {
             
             // randomNum = uint8(uint256(keccak256(abi.encodePacked(block.timestamp+i, block.difficulty-i))) % 10);
             
@@ -211,7 +210,7 @@ contract Command {
                 randomNumList.push(uint8(uint256(keccak256(abi.encodePacked(block.timestamp+i, block.difficulty+i))) % 10));
             }
             
-            if(randomNumList.length >= 1){
+            if(randomNumList.length >= 10){
                 break;
             }
         }
@@ -229,6 +228,9 @@ contract Command {
                 
             }
         }
+    }
+    function returnRandomNumListLength() public view returns (uint) {
+        return randomNumList.length;
     }
 }
 
