@@ -213,6 +213,7 @@ contract Command {
             
             existed = false;
             
+            // %employees.length
             exam(uint8(uint256(keccak256(abi.encodePacked(block.timestamp+i, block.difficulty+i))) % 10));
             
             if(existed == true){
@@ -220,9 +221,10 @@ contract Command {
             }
             
             if(existed == false) {
+                // %employees.length
                 randomNumList.push(uint8(uint256(keccak256(abi.encodePacked(block.timestamp+i, block.difficulty+i))) % 10));
             }
-            
+            // >= employees.length
             if(randomNumList.length >= 10){
                 break;
             }
@@ -242,6 +244,8 @@ contract Command {
             }
         }
     }
+    
+    // 실험 데이터 확인용
     function returnRandomNumListLength() public view returns (uint) {
         return randomNumList.length;
     }
