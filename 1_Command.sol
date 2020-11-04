@@ -43,13 +43,13 @@ contract Command {
         uint empTrustScore;
     }
 
-    // 검증그룹에서 직원들의 이름과 trust score
+   /* // 검증그룹에서 직원들의 이름과 trust score
     struct verifying{
         string verifyingGroupEmpName;
         uint verifyingEmpScore;
         uint verifyingTrustScore;
-    }
-
+    } */
+    
     // 직원이 실행한 명령의 점수를 담을 변수
     uint public issuedCmdScore;
 
@@ -60,10 +60,10 @@ contract Command {
     employee[] public employees;
  
     // 검증 그룹의 array
-    verifying[] public verifyingGroup;
+    employee[] public verifyingGroup;
 
-    // 중요하지 않은 명령들의 array
-    string[] public unSigCommands;
+/* // 중요하지 않은 명령들의 array
+    string[] public unSigCommands;  */
 
     // 검증할 명령의 점수 * 2 
     uint public verifyingScore;
@@ -99,7 +99,7 @@ contract Command {
     uint public empIssuedCmd;
 
 
-    // 중요한 명령들 입력하기
+    // 명령 정보 입력하기
    function setSigCmd() public {
         sigCommands.push(sigCommand(sigCommands.length+1 , "명령1", 3));
         sigCommands.push(sigCommand(sigCommands.length+1 , "명령2", 6));
@@ -124,42 +124,45 @@ contract Command {
     }
 
 
+/*
     // 중요하지 않은 명령들 입력하기 
     function setUnSigCmd(string memory _unSigCmdName) public {
         unSigCommands.push(_unSigCmdName);    
     }
-
-
+*/
     // get a significant commands's score
     // * -> 솔리디티 에서는 문자열 비교가 불가능하다.
     // sigCommands[0].score로 하니, 정상적으로 값이 출력됨을 알 수 있음. 
-    function issueSigCmd(uint _cmdNum, bool _sig, uint _empNum) public  {
+    function issueSigCmd(uint _cmdNum, uint _empNum) public  {
+
+        // 데이터 유효성 검사        
+        require(sigCommands.length > 0);
         
-        empIssuedCmd = _empNum;
+        issuedCmdScore = sigCommands[_cmdNum-1].cmdScore;
 
-        // 중요한 명령인지 판단 ?
-        if(_sig == true) {
-            require(sigCommands.length > 0);
-            issuedCmdScore = sigCommands[_cmdNum-1].cmdScore;            
-       } 
-       else {
-           issuedCmdScore = 0;
-       }
+        empIssuedCmd = _empNum-1;
+        employees[_empNum-1].empName = "명령 내린직원";
+        employees[_empNum-1].empScore = 0;
+        employees[_empNum-1].empTrustScore = 0;
+        
 
-       require( issuedCmdScore > 0 && employees.length > 0);
+        require( issuedCmdScore > 0 );
         
         // 명령 번호를 받아와서 점수의 2배수만큼을 verifyingScore에 집어넣음
-        verifyingScore = issuedCmdScore * 2;   // 정상적으로 작동
+        verifyingScore = issuedCmdScore * 2;   
 
-        // 랜덤 넘버가 중복되는 경우를 생각해야함.
+        //  속도 줄이기..   --> 원래는 이 부분이 분리되어 있었음.
+        // 여기서부터 오래걸림
+        // 굳이 employee의 모든 정보를 verifyingGroup에 저장하려고 하지 않아도 괜찮을 것 같음..
         for(uint j = 0; j < employees.length; j++) {
+
+            // 랜덤 리스트에서 값을 받아와 verifyingGroup 선정           
+            verifyingGroup.push(employee(verifyingGroup.length+1, employees[randomNumList[j]].empName, employees[randomNumList[j]].empScore, employees[randomNumList[j]].empTrustScore));
             
-            if(randomNumList[j] == empIssuedCmd) {
-                continue;
-            }           
-            
-            verifyingGroup.push(verifying(employees[randomNumList[j]].empName, employees[randomNumList[j]].empScore, employees[randomNumList[j]].empTrustScore));
+            // 검증그룹에 속한 직원들의 직원 점수의 합 >= (명령 실행 점수 * 2) 만족하는지를 위해
             sumOfVerifyingScore += employees[randomNumList[j]].empScore;
+            
+            // 신뢰도를 증/감 할때 사용
             candidatedList.push(randomNumList[j]);        
             
             if (sumOfVerifyingScore >= verifyingScore) {
@@ -172,15 +175,17 @@ contract Command {
     // 검증 그룹이 명령을 검증하는 function --> 검증 그룹의 index로 검증.
     function verify(uint __empNum) public payable returns (bool) {
         
-        verifyingGroupScore += verifyingGroup[__empNum].verifyingEmpScore;
-        verifyingGroupTrustScore += verifyingGroup[__empNum].verifyingTrustScore;
+        // 검증 과정
+
+        // 
+        verifyingGroupScore += verifyingGroup[__empNum-1].empScore;
+        verifyingGroupTrustScore += verifyingGroup[__empNum-1].empTrustScore;
 
         if(verifyingGroupTrustScore >= verifyingScore && trustScoreAdapted == false) {
             verifyingGroupScore += 1;
             trustScoreAdapted = true;
         }
 
-        // 가용성을 위해 2배수로 뽑은 것이지, 2배수를 검증해야 하는 것은 아님
         if(verifyingGroupScore >= issuedCmdScore) {
             return true;
         } else {
@@ -188,7 +193,6 @@ contract Command {
         }
         
     }
-
 
     // 명령 실행 결과에 따라 직원 검증 신뢰도에 +1 or -2 적용 함수
     function trustScoreFeedback(bool _executedWell) public payable {
@@ -203,7 +207,6 @@ contract Command {
             }
         }
     }
-
 
     // 랜덤 숫자를 구하는 함수
     function random() public  {
