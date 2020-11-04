@@ -215,7 +215,7 @@ contract Command {
             existed = false;
             
             // %employees.length
-            exam(uint8(uint256(keccak256(abi.encodePacked(block.timestamp+i, block.difficulty+i))) % 10));
+            exam(uint8(uint256(keccak256(abi.encodePacked(block.timestamp+i, block.difficulty+i))) % employees.length));
             
             if(existed == true){
                 continue;
@@ -223,10 +223,10 @@ contract Command {
             
             if(existed == false) {
                 // %employees.length
-                randomNumList.push(uint8(uint256(keccak256(abi.encodePacked(block.timestamp+i, block.difficulty+i))) % 10));
+                randomNumList.push(uint8(uint256(keccak256(abi.encodePacked(block.timestamp+i, block.difficulty+i))) % employees.length));
             }
             // >= employees.length
-            if(randomNumList.length >= 10){
+            if(randomNumList.length >= employees.length){
                 break;
             }
         }
