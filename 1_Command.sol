@@ -180,7 +180,8 @@ contract Command {
             trustScoreAdapted = true;
         }
 
-        if(verifyingGroupScore >= verifyingScore) {
+        // 가용성을 위해 2배수로 뽑은 것이지, 2배수를 검증해야 하는 것은 아님
+        if(verifyingGroupScore >= issuedCmdScore) {
             return true;
         } else {
             return false;
