@@ -87,7 +87,7 @@ contract Command {
     uint[] public candidatedList;
     
     // 무작위 수가 들어가있는 리스트
-    uint[] public randomNumList;
+    // uint[] public randomNumList;
 
     // 검증 그룹에 속해있는지 확인하는 변수
     bool public existed = false;
@@ -97,6 +97,9 @@ contract Command {
 
     // 명령을 내린 직원
     uint public empIssuedCmd;
+
+    // 새로운 랜덤 리스트
+    uint[] public randomNumList = [0,1,2,3,4,5,6,7,8,9];
 
 
     // 명령 정보 입력하기
@@ -208,8 +211,8 @@ contract Command {
         }
     }
 
-    // 랜덤 숫자를 구하는 함수
-    function random() public  {
+    // 랜덤 숫자를 구하는 함수 --> 사용 X
+    /* function random() public  {
         // employees.length == 10 가정
         for(uint i = 0; i < 50; i++) {
             
@@ -233,7 +236,7 @@ contract Command {
                 break;
             }
         }
-    }
+    }    */
     
 
     //검증 그룹에 해당 직원이 속해있는지 확인하는 함수
@@ -252,6 +255,16 @@ contract Command {
     // 실험 데이터 확인용
     function returnRandomNumListLength() public view returns (uint) {
         return randomNumList.length;
+    }
+
+
+    function shuffle() public  payable{
+       for (uint256 i = 0; i < randomNumList.length; i++) {
+            uint256 n = i + uint256(keccak256(abi.encodePacked(now))) % (randomNumList.length - i);
+            uint256 temp = randomNumList[n];
+            randomNumList[n] = randomNumList[i];
+            randomNumList[i] = temp;
+        }
     }
 }
 
