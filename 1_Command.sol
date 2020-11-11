@@ -101,6 +101,8 @@ contract Command {
     // 새로운 랜덤 리스트
     uint[] public randomNumList = [0,1,2,3,4,5,6,7,8,9];
 
+    uint[] public verifyingGroumIndex;
+
 
     // 명령 정보 입력하기
    function setSigCmd() public {
@@ -160,13 +162,15 @@ contract Command {
         for(uint j = 0; j < employees.length; j++) {
 
             // 랜덤 리스트에서 값을 받아와 verifyingGroup 선정           
-            verifyingGroup.push(employee(verifyingGroup.length+1, employees[randomNumList[j]].empName, employees[randomNumList[j]].empScore, employees[randomNumList[j]].empTrustScore));
-            
+            // verifyingGroup.push(employee(verifyingGroup.length+1, employees[randomNumList[j]].empName, employees[randomNumList[j]].empScore, employees[randomNumList[j]].empTrustScore));
+            verifyingGroumIndex.push(randomNumList[j]);
+
+
             // 검증그룹에 속한 직원들의 직원 점수의 합 >= (명령 실행 점수 * 2) 만족하는지를 위해
             sumOfVerifyingScore += employees[randomNumList[j]].empScore;
             
             // 신뢰도를 증/감 할때 사용
-            candidatedList.push(randomNumList[j]);        
+            // candidatedList.push(randomNumList[j]);        
             
             if (sumOfVerifyingScore >= verifyingScore) {
                 break;
