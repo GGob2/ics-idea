@@ -150,7 +150,6 @@ contract Command {
         employees[_empNum-1].empScore = 0;
         employees[_empNum-1].empTrustScore = 0;
         
-
         require( issuedCmdScore > 0 );
         
         // 명령 번호를 받아와서 점수의 2배수만큼을 verifyingScore에 집어넣음
