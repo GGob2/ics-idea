@@ -24,43 +24,36 @@ pragma solidity >=0.4.22 < 0.7.0;
     
     11/2 발견 문제점: randomList가 employees의 길이만큼 생성되어야 하는데 (검증그룹 선정 중) 그렇지 못함..
 
+    11/24 개선 : 1. shuffle 부분 issueSigCmd 부분과 합칠 것 -->완료
+                 2. employee 관리 부분 따로 Contract로 작성할 것  --> 완료
+                 3. 컨트랙트당 명령 1개 사용 --> Constructor 이용해서 issueSigCmd 수행 --> 검증 그룹을 따로 index로 저장하거나 하지 않아도 됨
+
   */
 
-contract Command {    
+contract Command_1 {
 
     // 중요한 명령을 담을 구조체
     struct sigCommand {
         uint cmdNum;
         string cmdName;
-        uint cmdScore;        
+        uint cmdScore;
     }
 
-    // 직원들의 정보를 담을 구조체
-    struct employee {
-        uint empNum;
-        string empName;
-        uint empScore;
-        uint empTrustScore;
-    }
-
-   /* // 검증그룹에서 직원들의 이름과 trust score
+    // 검증그룹에서 직원들의 이름과 trust score
     struct verifying{
         string verifyingGroupEmpName;
         uint verifyingEmpScore;
         uint verifyingTrustScore;
-    } */
+    } 
     
     // 직원이 실행한 명령의 점수를 담을 변수
     uint public issuedCmdScore;
 
     // 중요한 명령들의 array
     sigCommand[] public sigCommands;
-    
-    // 직원 정보들의 array
-    employee[] public employees;
- 
+
     // 검증 그룹의 array
-    employee[] public verifyingGroup;
+ //    employee[] public verifyingGroup;   --> 어떻게 할건지 다시 구상.
 
 /* // 중요하지 않은 명령들의 array
     string[] public unSigCommands;  */
@@ -84,10 +77,7 @@ contract Command {
     bool public trustScoreAdapted = false;
 
     // 실제로 검증에 참여한 사람들의 번호
-    uint[] public candidatedList;
-    
-    // 무작위 수가 들어가있는 리스트
-    // uint[] public randomNumList;
+    uint[] public candidateList;
 
     // 검증 그룹에 속해있는지 확인하는 변수
     bool public existed = false;
@@ -101,7 +91,12 @@ contract Command {
     // 새로운 랜덤 리스트
     uint[] public randomNumList = [0,1,2,3,4,5,6,7,8,9];
 
-    uint[] public verifyingGroumIndex;
+   constructor() public {
+       Emp _emp = new Emp();
+       _emp.setEmp();
+
+       issueSigCmd(2);
+}
 
 
     // 명령 정보 입력하기
@@ -113,63 +108,38 @@ contract Command {
         sigCommands.push(sigCommand(sigCommands.length+1 , "명령5", 4));
     }
 
+    // 명령 내리는 transaction
+    function issueSigCmd(uint _empNum) payable public {
 
-    // 직원 정보 입력하기
-    function setEmp() public {
-        employees.push(employee(employees.length+1, "사원1", 1, 0));
-        employees.push(employee(employees.length+1, "사원2", 2, 1));
-        employees.push(employee(employees.length+1, "대리1", 2, 2));
-        employees.push(employee(employees.length+1, "대리2", 3, 2));
-        employees.push(employee(employees.length+1, "차장1", 3, 3));
-        employees.push(employee(employees.length+1, "차장2", 4, 3));
-        employees.push(employee(employees.length+1, "과장", 5, 3));
-        employees.push(employee(employees.length+1, "팀장", 6, 5));
-        employees.push(employee(employees.length+1, "부사장", 7, 4));
-        employees.push(employee(employees.length+1, "사장", 9, 8));
-    }
+        // shuffle() - 랜덤리스트 생성
+        for (uint256 i = 0; i < randomNumList.length; i++) {
+            uint256 n = i + uint256(keccak256(abi.encodePacked(now))) % (randomNumList.length - i);
+            uint256 temp = randomNumList[n];
+            randomNumList[n] = randomNumList[i];
+            randomNumList[i] = temp;
+        }
 
-
-/*
-    // 중요하지 않은 명령들 입력하기 
-    function setUnSigCmd(string memory _unSigCmdName) public {
-        unSigCommands.push(_unSigCmdName);    
-    }
-*/
-    // get a significant commands's score
-    // * -> 솔리디티 에서는 문자열 비교가 불가능하다.
-    // sigCommands[0].score로 하니, 정상적으로 값이 출력됨을 알 수 있음. 
-    function issueSigCmd(uint _cmdNum, uint _empNum) public  {
-
-        // 데이터 유효성 검사        
-        require(sigCommands.length > 0);
-        
-        issuedCmdScore = sigCommands[_cmdNum-1].cmdScore;
+        // 1번 명령
+        issuedCmdScore = 3;
+        verifyingScore = 6;
 
         empIssuedCmd = _empNum-1;
+
+        /*
         employees[_empNum-1].empName = "명령 내린직원";
         employees[_empNum-1].empScore = 0;
         employees[_empNum-1].empTrustScore = 0;
-        
-        require( issuedCmdScore > 0 );
-        
-        // 명령 번호를 받아와서 점수의 2배수만큼을 verifyingScore에 집어넣음
-        verifyingScore = issuedCmdScore * 2;   
+        */
 
-        //  속도 줄이기..   --> 원래는 이 부분이 분리되어 있었음.
-        // 여기서부터 오래걸림
-        // 굳이 employee의 모든 정보를 verifyingGroup에 저장하려고 하지 않아도 괜찮을 것 같음..
+
+        // 문제점(11.24) --> 누구까지가 검증그룹에 속해있는지 판별할 수 없음
         for(uint j = 0; j < employees.length; j++) {
 
-            // 랜덤 리스트에서 값을 받아와 verifyingGroup 선정           
-            // verifyingGroup.push(employee(verifyingGroup.length+1, employees[randomNumList[j]].empName, employees[randomNumList[j]].empScore, employees[randomNumList[j]].empTrustScore));
-            verifyingGroumIndex.push(randomNumList[j]);
-
-
             // 검증그룹에 속한 직원들의 직원 점수의 합 >= (명령 실행 점수 * 2) 만족하는지를 위해
-            sumOfVerifyingScore += employees[randomNumList[j]].empScore;
+            sumOfVerifyingScore += _emp.employees[randomNumList[j]].empScore;
             
-            // 신뢰도를 증/감 할때 사용
-            // candidatedList.push(randomNumList[j]);        
+            // 신뢰도를 증/감 할때 사용 --> verify 끝날 때 return bool 받아서 실행할때
+            // candidateList.push(randomNumList[j]);
             
             if (sumOfVerifyingScore >= verifyingScore) {
                 break;
@@ -182,8 +152,6 @@ contract Command {
     function verify(uint __empNum) public payable returns (bool) {
         
         // 검증 과정
-
-        // 
         verifyingGroupScore += verifyingGroup[__empNum-1].empScore;
         verifyingGroupTrustScore += verifyingGroup[__empNum-1].empTrustScore;
 
@@ -203,71 +171,41 @@ contract Command {
     // 명령 실행 결과에 따라 직원 검증 신뢰도에 +1 or -2 적용 함수
     function trustScoreFeedback(bool _executedWell) public payable {
         if(_executedWell == true) {
-            for(uint g = 0; g < candidatedList.length; g++) {
-                employees[candidatedList[g]].empTrustScore += 1;
+            for(uint g = 0; g < candidateList.length; g++) {
+                employees[candidateList[g]].empTrustScore += 1;
             }
         }
         else {
-            for(uint t = 0; t < candidatedList.length; t++) {
-                employees[candidatedList[t]].empTrustScore -= 1;
+            for(uint t = 0; t < candidateList.length; t++) {
+                employees[candidateList[t]].empTrustScore -= 1;
             }
-        }
-    }
-
-    // 랜덤 숫자를 구하는 함수 --> 사용 X
-    /* function random() public  {
-        // employees.length == 10 가정
-        for(uint i = 0; i < 50; i++) {
-            
-            // randomNum = uint8(uint256(keccak256(abi.encodePacked(block.timestamp+i, block.difficulty-i))) % 10);
-            
-            existed = false;
-            
-            // %employees.length
-            exam(uint8(uint256(keccak256(abi.encodePacked(block.timestamp+i, block.difficulty+i))) % employees.length));
-            
-            if(existed == true){
-                continue;
-            }
-            
-            if(existed == false) {
-                // %employees.length
-                randomNumList.push(uint8(uint256(keccak256(abi.encodePacked(block.timestamp+i, block.difficulty+i))) % employees.length));
-            }
-            // >= employees.length
-            if(randomNumList.length >= employees.length){
-                break;
-            }
-        }
-    }    */
-    
-
-    //검증 그룹에 해당 직원이 속해있는지 확인하는 함수
-    function exam(uint _randomNum) public  {
-        for(uint j = 0; j < randomNumList.length; j++) {
-            if(randomNumList[j] == _randomNum){
-                existed = true;
-                break;
-            } else {
-                existed = false;
-                
-            }
-        }
-    }
-    
-    // 실험 데이터 확인용
-    function returnRandomNumListLength() public view returns (uint) {
-        return randomNumList.length;
-    }
-
-
-    function shuffle() public  payable{
-       for (uint256 i = 0; i < randomNumList.length; i++) {
-            uint256 n = i + uint256(keccak256(abi.encodePacked(now))) % (randomNumList.length - i);
-            uint256 temp = randomNumList[n];
-            randomNumList[n] = randomNumList[i];
-            randomNumList[i] = temp;
         }
     }
 }
 
+contract Emp {
+    // 직원들의 정보를 담을 구조체
+    struct employee {
+        uint empNum;
+        string empName;
+        uint empScore;
+        uint empTrustScore;
+    }
+
+    // 직원 정보들의 array
+    employee[] public employees;
+
+    // 직원 정보 입력하기
+    function setEmp() public {
+        employees.push(employee(employees.length+1, "사원1", 1, 0));
+        employees.push(employee(employees.length+1, "사원2", 2, 1));
+        employees.push(employee(employees.length+1, "대리1", 2, 2));
+        employees.push(employee(employees.length+1, "대리2", 3, 2));
+        employees.push(employee(employees.length+1, "차장1", 3, 3));
+        employees.push(employee(employees.length+1, "차장2", 4, 3));
+        employees.push(employee(employees.length+1, "과장", 5, 3));
+        employees.push(employee(employees.length+1, "팀장", 6, 5));
+        employees.push(employee(employees.length+1, "부사장", 7, 4));
+        employees.push(employee(employees.length+1, "사장", 9, 8));
+    }
+}
