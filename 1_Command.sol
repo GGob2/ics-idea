@@ -91,9 +91,13 @@ contract Command_1 {
     // 새로운 랜덤 리스트
     uint[] public randomNumList = [0,1,2,3,4,5,6,7,8,9];
 
+    uint public empLen;
+
+    Emp public _emp = new Emp() ;
+
    constructor() public {
-       Emp _emp = new Emp();
-       _emp.setEmp();
+
+       empLen = _emp.setEmp();
 
        issueSigCmd(2);
 }
@@ -101,6 +105,7 @@ contract Command_1 {
 
     // 명령 정보 입력하기
    function setSigCmd() public {
+       
         sigCommands.push(sigCommand(sigCommands.length+1 , "명령1", 3));
         sigCommands.push(sigCommand(sigCommands.length+1 , "명령2", 6));
         sigCommands.push(sigCommand(sigCommands.length+1 , "명령3", 10));
@@ -125,18 +130,11 @@ contract Command_1 {
 
         empIssuedCmd = _empNum-1;
 
-        /*
-        employees[_empNum-1].empName = "명령 내린직원";
-        employees[_empNum-1].empScore = 0;
-        employees[_empNum-1].empTrustScore = 0;
-        */
-
-
         // 문제점(11.24) --> 누구까지가 검증그룹에 속해있는지 판별할 수 없음
-        for(uint j = 0; j < employees.length; j++) {
+        for(uint j = 0; j < 10; j++) {
 
             // 검증그룹에 속한 직원들의 직원 점수의 합 >= (명령 실행 점수 * 2) 만족하는지를 위해
-            sumOfVerifyingScore += _emp.employees[randomNumList[j]].empScore;
+            sumOfVerifyingScore += _emp.employees[0].empScore;
             
             // 신뢰도를 증/감 할때 사용 --> verify 끝날 때 return bool 받아서 실행할때
             // candidateList.push(randomNumList[j]);
@@ -148,7 +146,7 @@ contract Command_1 {
         }
     }  
 
-    // 검증 그룹이 명령을 검증하는 function --> 검증 그룹의 index로 검증.
+    /*// 검증 그룹이 명령을 검증하는 function --> 검증 그룹의 index로 검증.
     function verify(uint __empNum) public payable returns (bool) {
         
         // 검증 과정
@@ -181,6 +179,7 @@ contract Command_1 {
             }
         }
     }
+    */
 }
 
 contract Emp {
@@ -196,7 +195,7 @@ contract Emp {
     employee[] public employees;
 
     // 직원 정보 입력하기
-    function setEmp() public {
+    function setEmp() public returns (uint) {
         employees.push(employee(employees.length+1, "사원1", 1, 0));
         employees.push(employee(employees.length+1, "사원2", 2, 1));
         employees.push(employee(employees.length+1, "대리1", 2, 2));
@@ -207,5 +206,7 @@ contract Emp {
         employees.push(employee(employees.length+1, "팀장", 6, 5));
         employees.push(employee(employees.length+1, "부사장", 7, 4));
         employees.push(employee(employees.length+1, "사장", 9, 8));
+
+        return employees.length;
     }
 }
