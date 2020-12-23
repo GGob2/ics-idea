@@ -54,6 +54,8 @@ contract Command_1 {
             randomNumList[i] = temp;
         }
 
+        _emp.setIssuingEmp(_empNum-1);
+
         for(uint i = 0; i < 10; i++) {
             sumOfVerifyingGroupScore += _emp.getEmpScore(randomNumList[i]);
             
@@ -62,7 +64,6 @@ contract Command_1 {
                 break;
             }
         }        
-
     }
     
     // 검증 그룹이 명령을 검증하는 function --> 검증 그룹의 index를 파라미터로 사용
@@ -70,8 +71,8 @@ contract Command_1 {
         // 검증 그룹 점수의 합 초기화
         sumOfVerifyingGroupScore = 0;
 
-        sumOfVerifyingGroupScore += _emp.getEmpScore(_numOfVerifyingGroup);
-        sumOfVerifyingGroupTrustScore += _emp.getEmpTrustScore(_numOfVerifyingGroup);
+        sumOfVerifyingGroupScore += _emp.getEmpScore(randomNumList[_numOfVerifyingGroup]);
+        sumOfVerifyingGroupTrustScore += _emp.getEmpTrustScore(randomNumList[_numOfVerifyingGroup]);
 
         if(sumOfVerifyingGroupTrustScore >= doubleOfCmdScore && trustScoreAdapted == false) {
             sumOfVerifyingGroupScore += 1;
@@ -81,22 +82,21 @@ contract Command_1 {
         if(sumOfVerifyingGroupScore >= cmdScore) {
             isVerified = true;
         }
+
         return isVerified;
     }
 
     function trustScoreFeedback() public payable {
         if(isVerified == true) {
-            for(uint t = 0; t < lastOfVerifyingGroup-1; t++) {
+            for(uint t = 0; t < lastOfVerifyingGroup; t++) {
                 _emp.updateEmpTrustScore(randomNumList[t], true);
             }
         } else {
-            for(uint t = 0; t < lastOfVerifyingGroup-1; t++) {
+            for(uint t = 0; t < lastOfVerifyingGroup; t++) {
                 _emp.updateEmpTrustScore(randomNumList[t], false);
             }
         }
     }
-
-
 }
 
 contract Emp {
@@ -131,6 +131,12 @@ contract Emp {
         return employees.length;
     }
     
+    // 명령 내린 직원의 점수를 0으로 바꾸는 함수
+    function setIssuingEmp(uint _issuingCmdEmpNum) public {
+        employees[_issuingCmdEmpNum].empScore = 0;
+        employees[_issuingCmdEmpNum].empTrustScore = 0;
+    }
+
     // 파라미터로 넘겨준 번호에 해당하는 직원의 점수를 가져오는 함수
     function getEmpScore(uint _empNum) public view returns(uint) {
         return employees[_empNum].empScore;
@@ -148,9 +154,22 @@ contract Emp {
         } else {
             employees[_empNum].empTrustScore -= 1;
         }
-    }
-
-
-    
+    }    
 }
 
+
+
+
+/* 12.24 --> 기능 작동 여부: 
+
+1. 랜덤리스트 생성 o
+2. 직원 정보 컨트랙트 생성자 o
+
+
+
+
+
+
+
+*/
+                             
