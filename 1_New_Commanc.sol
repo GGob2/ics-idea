@@ -1,8 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.4.22 < 0.7.0;
 
+// 1번 명령에 대한 컨트랙트
 contract Command_1 {
     
+    // 검증 그룹 구조체 선정
     struct verifying {
         string verifyingGroupEmpName;
         uint verifyingGroupEmpScore;
@@ -18,8 +20,11 @@ contract Command_1 {
     // 랜덤리스트 생성을 위한 랜덤넘버 리스트
     uint[] public randomNumList = [0,1,2,3,4,5,6,7,8,9];
 
-    // 검증 그룹 점수 모으기
+    // 검증 그룹 점수 모으기 --> 검증 그룹 선정 시 사용
     uint public sumOfVerifyingGroupScore;
+
+    // 검증 그룹 점수 모으기 --> 검증 시 사용
+    uint public sumOfVerifyingScore;
 
     // randomNumList에서 검증 그룹 마지막 번호 저장하기
     uint public lastOfVerifyingGroup;
@@ -71,15 +76,15 @@ contract Command_1 {
         // 검증 그룹 점수의 합 초기화
         sumOfVerifyingGroupScore = 0;
 
-        sumOfVerifyingGroupScore += _emp.getEmpScore(randomNumList[_numOfVerifyingGroup]);
+        sumOfVerifyingScore += _emp.getEmpScore(randomNumList[_numOfVerifyingGroup]);
         sumOfVerifyingGroupTrustScore += _emp.getEmpTrustScore(randomNumList[_numOfVerifyingGroup]);
 
         if(sumOfVerifyingGroupTrustScore >= doubleOfCmdScore && trustScoreAdapted == false) {
-            sumOfVerifyingGroupScore += 1;
+            sumOfVerifyingScore += 1;
             trustScoreAdapted = true;
         }
 
-        if(sumOfVerifyingGroupScore >= cmdScore) {
+        if(sumOfVerifyingScore >= cmdScore) {
             isVerified = true;
         }
 
@@ -164,12 +169,6 @@ contract Emp {
 
 1. 랜덤리스트 생성 o
 2. 직원 정보 컨트랙트 생성자 o
-
-
-
-
-
-
 
 */
                              
