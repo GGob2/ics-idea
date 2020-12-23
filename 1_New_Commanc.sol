@@ -24,16 +24,27 @@ contract Command_1 {
     // randomNumList에서 검증 그룹 마지막 번호 저장하기
     uint public lastOfVerifyingGroup;
     
+    // 검증 그룹 신뢰 점수 모으기
+    uint public sumOfVerifyingGroupTrustScore;
+    
+    // TrustScore로 sumOfVerifyingGroupScore에 점수가 더해졌는지 확인
+    bool public trustScoreAdapted = false;
+
+    // 검증 결과 저장
+    bool public isVerified = false;
+
+
+    // Emp 컨트랙트 객체 생성
     Emp public _emp = new Emp(); 
     
     // 정상적으로 작동
-    uint public empScoreTest = _emp.getEmp(0);
+    uint public empScoreTest = _emp.getEmpScore(0);
 
     constructor() public {    
-        issueCmd(3); // 3번 emp가 실행
+        issueCmd_1(3); // 3번 emp가 실행
     }
 
-    function issueCmd(uint _empNum) payable public {
+    function issueCmd_1(uint _empNum) payable public {
         
         // shuffle() - 랜덤리스트 생성
         for (uint256 i = 0; i < randomNumList.length; i++) {
@@ -56,18 +67,39 @@ contract Command_1 {
     
     // 검증 그룹이 명령을 검증하는 function --> 검증 그룹의 index를 파라미터로 사용
     function verify(uint _numOfVerifyingGroup) public payable returns (bool) {
-           
+        // 검증 그룹 점수의 합 초기화
+        sumOfVerifyingGroupScore = 0;
+
+        sumOfVerifyingGroupScore += _emp.getEmpScore(_numOfVerifyingGroup);
+        sumOfVerifyingGroupTrustScore += _emp.getEmpTrustScore(_numOfVerifyingGroup);
+
+        if(sumOfVerifyingGroupTrustScore >= doubleOfCmdScore && trustScoreAdapted == false) {
+            sumOfVerifyingGroupScore += 1;
+            trustScoreAdapted = true;
+        }
+
+        if(sumOfVerifyingGroupScore >= cmdScore) {
+            isVerified = true;
+        }
+        return isVerified;
     }
 
     function trustScoreFeedback() public payable {
-
+        if(isVerified == true) {
+            for(uint t = 0; t < lastOfVerifyingGroup-1; t++) {
+                _emp.updateEmpTrustScore(randomNumList[t], true);
+            }
+        } else {
+            for(uint t = 0; t < lastOfVerifyingGroup-1; t++) {
+                _emp.updateEmpTrustScore(randomNumList[t], false);
+            }
+        }
     }
 
 
 }
 
 contract Emp {
-
     constructor() public {
         setEmp();
     }
@@ -99,10 +131,17 @@ contract Emp {
         return employees.length;
     }
     
+    // 파라미터로 넘겨준 번호에 해당하는 직원의 점수를 가져오는 함수
     function getEmpScore(uint _empNum) public view returns(uint) {
         return employees[_empNum].empScore;
     }
     
+    // 파라미터로 넘겨준 번호에 해당하는 직원의 신뢰점수를 가져오는 함수
+    function getEmpTrustScore(uint _empNum) public view returns(uint) {
+        return employees[_empNum].empTrustScore;
+    }
+
+    // 검증 과정이 끝난 후, 신뢰 점수를 증감하는 함수
     function updateEmpTrustScore(uint _empNum, bool _issuedStatus) public {
         if(_issuedStatus == true) {
             employees[_empNum].empTrustScore += 1;
@@ -112,8 +151,6 @@ contract Emp {
     }
 
 
-    function getEmpTrustScore(uint _empNum) public view returns(uint) {
-        return employees[_empNum].empTrustScore;
-    }
+    
 }
 
