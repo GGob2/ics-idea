@@ -55,7 +55,7 @@ contract Command_1 {
         }
 
         for(uint i = 0; i < 10; i++) {
-            sumOfVerifyingGroupScore += _emp.getEmp(randomNumList[i]);
+            sumOfVerifyingGroupScore += _emp.getEmpScore(randomNumList[i]);
             
             if(sumOfVerifyingGroupScore >= doubleOfCmdScore) {
                 lastOfVerifyingGroup = i;
