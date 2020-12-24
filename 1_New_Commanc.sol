@@ -4,13 +4,6 @@ pragma solidity >=0.4.22 < 0.7.0;
 // 1번 명령에 대한 컨트랙트
 contract Command_1 {
     
-    // 검증 그룹 구조체 선정
-    struct verifying {
-        string verifyingGroupEmpName;
-        uint verifyingGroupEmpScore;
-        uint verifyingGroupEmpTrustScore;
-    }
-    
     // 명령 3번의 점수
     uint public cmdScore = 5;
 
@@ -42,9 +35,6 @@ contract Command_1 {
     // Emp 컨트랙트 객체 생성
     Emp public _emp = new Emp(); 
     
-    // 정상적으로 작동
-    uint public empScoreTest = _emp.getEmpScore(0);
-
     constructor() public {    
         issueCmd_1(3); // 3번 emp가 실행
     }
@@ -87,7 +77,7 @@ contract Command_1 {
         if(sumOfVerifyingScore >= cmdScore) {
             isVerified = true;
         }
-
+        
         return isVerified;
     }
 
