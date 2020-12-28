@@ -1,0 +1,5 @@
+#lock
+geth
+
+# console log
+error.log
