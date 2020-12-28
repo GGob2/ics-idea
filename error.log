@@ -789,3 +789,4 @@ INFO [12-29|01:42:07.797] Successfully sealed new block            number=133 se
 INFO [12-29|01:42:07.797] 🔗 block reached canonical chain          number=126 hash="29004f…c84f63"
 INFO [12-29|01:42:07.797] 🔨 mined potential block                  number=133 hash="a15d92…65ee12"
 INFO [12-29|01:42:07.797] Commit new mining work                   number=134 sealhash="7ef49a…28b83a" uncles=0 txs=0 gas=0 fees=0 elapsed=0s
+^C
