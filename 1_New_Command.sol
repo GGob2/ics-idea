@@ -51,11 +51,12 @@ contract Command_1 {
 
         _emp.setIssuingEmp(_empNum-1);
 
-        for(uint i = 0; i < 10; i++) {
-            sumOfVerifyingGroupScore += _emp.getEmpScore(randomNumList[i]);
+        // 시간이 제일 오래걸리는 부분
+        for(uint j = 0; j < 10; j++) {
+            sumOfVerifyingGroupScore += _emp.getEmpScore(randomNumList[j]);
             
             if(sumOfVerifyingGroupScore >= doubleOfCmdScore) {
-                lastOfVerifyingGroup = i;
+                lastOfVerifyingGroup = j;
                 break;
             }
         }        
@@ -87,8 +88,8 @@ contract Command_1 {
                 _emp.updateEmpTrustScore(randomNumList[t], true);
             }
         } else {
-            for(uint t = 0; t < lastOfVerifyingGroup; t++) {
-                _emp.updateEmpTrustScore(randomNumList[t], false);
+            for(uint g = 0; g < lastOfVerifyingGroup; g++) {
+                _emp.updateEmpTrustScore(randomNumList[g], false);
             }
         }
     }
