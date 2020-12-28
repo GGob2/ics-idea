@@ -14,3 +14,9 @@ based paper: 스마트 컨트랙트 기반의 산업제어시스템 접근 제�
   <img width="600" src="https://user-images.githubusercontent.com/59510222/103154513-158e7680-47db-11eb-8e2c-cdd1ed9b89a8.png">
 </div>
 
+***
+### Geth console
+```
+geth --networkid "10" --nodiscover --datadir C:\private_net\ics-idea --rpc --rpcaddr "localhost" --rpcport "8545" --rpccorsdomain "*" --rpcapi "eth, net, web3, personal" --targetgaslimit "2000000" console 2>> C:\private_net\ics-idea\error.log
+```
+
