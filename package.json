@@ -1,0 +1,22 @@
+{
+  "name": "ics-idea",
+  "version": "1.0.0",
+  "description": "access control in ics with smart contract, blockchain (idea) + new trust score system in each rank",
+  "main": "console.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GGob2/ics-idea.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GGob2/ics-idea/issues"
+  },
+  "homepage": "https://github.com/GGob2/ics-idea#readme",
+  "dependencies": {
+    "web3": "^0.20.4"
+  }
+}
