@@ -10,3 +10,5 @@ const source = fs.readFileSync('C:\Users\MyungJoe Kang\Desktop\private_net\ics-i
 
 const compiledContract = solc.compile(source, 1);
 const abi = compiledContract.contracts
+
+/* */

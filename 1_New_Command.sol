@@ -82,17 +82,30 @@ contract Command_1 {
         return isVerified;
     }
 
+    // TODO : 2개의 함수로 분리
+    // 검증 과정 후, 신뢰 점수 피드백
     function trustScoreFeedback() public payable {
         if(isVerified == true) {
-            for(uint t = 0; t < lastOfVerifyingGroup; t++) {
-                _emp.updateEmpTrustScore(randomNumList[t], true);
-            }
+            trustScorePlusFeedback();
         } else {
-            for(uint g = 0; g < lastOfVerifyingGroup; g++) {
-                _emp.updateEmpTrustScore(randomNumList[g], false);
-            }
+            trustScoreMinusFeedback();
         }
     }
+
+    function trustScorePlusFeedback() public payable {
+        for(uint t = 0; t < lastOfVerifyingGroup; t++) {
+            _emp.plusEmpTrustScore(randomNumList[t]);
+        }
+    }
+    
+    function trustScoreMinusFeedback() public payable {
+        for(uint g = 0; g < lastOfVerifyingGroup; g++) {
+            _emp.minusEmpTrustScore(randomNumList[t]);
+        }
+    }
+    
+
+
 }
 
 contract Emp {
@@ -143,14 +156,15 @@ contract Emp {
         return employees[_empNum].empTrustScore;
     }
 
+    // TODO : 2개의 function으로 바꾸기
     // 검증 과정이 끝난 후, 신뢰 점수를 증감하는 함수
-    function updateEmpTrustScore(uint _empNum, bool _issuedStatus) public {
-        if(_issuedStatus == true) {
-            employees[_empNum].empTrustScore += 1;
-        } else {
-            employees[_empNum].empTrustScore -= 1;
-        }
-    }    
+    function plusEmpTrustScore(uint _empNum) public {
+        employees[_empNum].empTrustScore += 1;
+    }
+
+    function minusEmpTrustScore(uint _empNum) public {
+        employees[_empNum].empTrustScore -= 1;
+    }
 }
 
 
