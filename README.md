@@ -10,7 +10,7 @@ based paper: [스마트 컨트랙트 기반의 산업제어시스템 접근 제�
  - ics-idea는 랜덤으로 선택한 검증 그룹을 구성 해, 팀을 꾸려 공격하는 공격자에도 대처 할 수 있는 ics 환경을 구성합니다.
  
 <div>
-  <img width="600" src="https://user-images.githubusercontent.com/59510222/103611837-77cb4200-4f66-11eb-9c76-4411ee780c66.png">
+  <img width="850" src="https://user-images.githubusercontent.com/59510222/103611837-77cb4200-4f66-11eb-9c76-4411ee780c66.png">
 </div>
 
 ### 해결해야 하는 점 
