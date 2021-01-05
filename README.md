@@ -7,6 +7,16 @@ based paper: 스마트 컨트랙트 기반의 산업제어시스템 접근 제�
  - 기존 논문의 취약점으로, 공격자가 팀을 꾸려 공격한다면 막을 수 없는 치명적인 결함이 존재한다. 즉, 보안 측면에서 보완해야 할 점이 존재합니다.
  - ics-idea는 랜덤으로 선택한 검증 그룹을 구성 해, 팀을 꾸려 공격하는 공격자에도 대처 할 수 있는 ics 환경을 구성합니다.
  
+<div>
+  <img width="600" src="https://user-images.githubusercontent.com/59510222/103611837-77cb4200-4f66-11eb-9c76-4411ee780c66.png">
+</div>
+
+### 해결해야 하는 점
+  - 기존 시스템(2_New_CounterCommand.sol)과 제안 시스템(1_New_Command.sol)을 [Remix](https://remix.ethereum.org)에서 컴파일하여 실행했을 때
+    시간이 약 3초 정도가 더 걸리는 현상이 발생
+  - 하지만, [Remix](https://remix.ethereum.org)에서는, 정확한 Timestamp를 비교하기 어렵기 때문에, `web3`를 이용해 `Javascript Timer`를 구현해야 함
+
+
 
 ***
 ### Proposed System Architecture
