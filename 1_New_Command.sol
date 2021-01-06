@@ -1,6 +1,18 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.4.22 < 0.7.0;
 
+/*
+ TODO (01/07) : 검증 그룹을 선정할 떄 2배수를 확인하는 과정에서 시간이 너무 오래 걸리는 문제 해결해야 함
+                현재는 검증 그룹을 선정할 때, 한명씩 점수를 더해서 명령 점수의 2배수를 넘는 지, 확인하는 
+                과정이 존재 (매우 비효율적) --> 
+                1. 랜덤리스트를 절반 씩 분할하여 a, b 그룹으로 나눔
+                2. a 그룹에 해당하는 검증 그룹의 직원 점수를 더한 뒤, 2배수를 넘기는 지 확인
+                    2-1. 넘긴다면 그냥 그대로 a 그룹에게 진행
+                    2-2. 넘기지 않는 다면 a 그룹의 마지막 inedx + 1 하여 명령 점수 2배수 만족하는 지 확인
+                    2-3. 만족할 때 까지 2-2 반복
+                3. 종료
+*/
+
 // 1번 명령에 대한 컨트랙트
 contract Command_1 {
     
@@ -100,12 +112,10 @@ contract Command_1 {
     
     function trustScoreMinusFeedback() public payable {
         for(uint g = 0; g < lastOfVerifyingGroup; g++) {
-            _emp.minusEmpTrustScore(randomNumList[t]);
+            _emp.minusEmpTrustScore(randomNumList[g]);
         }
     }
     
-
-
 }
 
 contract Emp {
@@ -166,14 +176,3 @@ contract Emp {
         employees[_empNum].empTrustScore -= 1;
     }
 }
-
-
-
-
-/* 12.24 --> 기능 작동 여부: 
-
-1. 랜덤리스트 생성 o
-2. 직원 정보 컨트랙트 생성자 o
-
-*/
-                             
