@@ -64,14 +64,22 @@ contract Command_1 {
         _emp.setIssuingEmp(_empNum-1);
 
         // 시간이 제일 오래걸리는 부분
-        for(uint j = 0; j < 10; j++) {
+        
+        // TODO 구현 중... (1/10 ~)
+
+        // 5번까지 더한다..
+        for(uint j = 0; j < 5; j++) {
             sumOfVerifyingGroupScore += _emp.getEmpScore(randomNumList[j]);
-            
-            if(sumOfVerifyingGroupScore >= doubleOfCmdScore) {
-                lastOfVerifyingGroup = j;
-                break;
-            }
-        }        
+        }
+
+        // 2배수 만족하는가?
+        if (sumOfVerifyingGroupScore >= doubleOfCmdScore) {
+                // 만족한 경우
+                lastOfVerifyingGroup = 4;
+        } else {
+                // 만족하지 못한 경우
+                lastOfVerifyingGroup = 6;
+        }
     }
     
     // 검증 그룹이 명령을 검증하는 function --> 검증 그룹의 index를 파라미터로 사용
