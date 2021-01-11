@@ -36,3 +36,7 @@ based paper: [스마트 컨트랙트 기반의 산업제어시스템 접근 제�
 geth --networkid "10" --nodiscover --datadir C:\private_net\ics-idea --rpc --rpcaddr "localhost" --rpcport "8545" --rpccorsdomain "*" --rpcapi "eth, net, web3, personal" --targetgaslimit "2000000" console 2>> C:\private_net\ics-idea\error.log
 ```
 
+### `solc.exe`을 이용한 컴파일로 abi, bin 얻기
+```
+private_net\ics-idea>solc.exe --bin -o bin --overwrite --combined-json abi, bin <File>
+```
