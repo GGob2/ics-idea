@@ -21,7 +21,7 @@ const CommandContractInstance = CommandContractFactory.new(initialSupply, {
         console.log('Contract mined! address: ' + contract.address + ' transactionHash: ' + contract.transactionHash)
     }
 }
-})
+)
 const account2 = web3.eth.accounts[1];
 
 const source = fs.readFileSync('C:\\Users\\MyungJoe Kang\\Desktop\\private_net\\ics-idea\\1_New_Command.sol', 'utf-8');
