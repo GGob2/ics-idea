@@ -1,7 +1,5 @@
 # data files (acceess denied)
 geth
-
-geth/LOCK
-
+geth/
 geth/LOCK
 geth/nodekey

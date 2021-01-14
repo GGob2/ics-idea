@@ -1,6 +1,18 @@
-=============== Dec 29, 2020 (KST) ===============
-01:35:17.229333 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
-01:35:17.233314 db@open opening
-01:35:17.237368 version@stat F·[] S·0B[] Sc·[]
-01:35:17.252571 db@janitor F·2 G·0
-01:35:17.252571 db@open done T·19.257ms
+=============== Jan 14, 2021 (KST) ===============
+01:55:08.737655 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+01:55:08.743465 db@open opening
+01:55:08.744713 version@stat F·[] S·0B[] Sc·[]
+01:55:08.748666 db@janitor F·2 G·0
+01:55:08.748853 db@open done T·5.3872ms
+=============== Jan 14, 2021 (KST) ===============
+02:24:08.492571 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+02:24:08.493572 version@stat F·[] S·0B[] Sc·[]
+02:24:08.493572 db@open opening
+02:24:08.494568 journal@recovery F·1
+02:24:08.495566 journal@recovery recovering @1
+02:24:08.498654 memdb@flush created L0@2 N·2 S·176B "loc..seq,v2":"version,v1"
+02:24:08.500552 version@stat F·[1] S·176B[176B] Sc·[0.25]
+02:24:08.507534 db@janitor F·3 G·0
+02:24:08.507594 db@open done T·14.0221ms
+02:52:00.393325 db@close closing
+02:52:00.394299 db@close done T·974.7µs

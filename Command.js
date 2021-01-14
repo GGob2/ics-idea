@@ -14,11 +14,15 @@ const CommandContractFactory = web3.eth.contract(JSON.parse(abi));
 
 const CommandContractInstance = CommandContractFactory.new({
     from: web3.eth.accounts[0],
-    data : bin
-    ,
+    data : bin,
     gas: '3000000000'
 }, function (e,contract) {
     console.log(e, contract);
+    if(contract) {
+        console.log(contract)
+    } else {
+        console.log("There is no Contract")
+    }
     console.log("this is e~~~~~~~~ \n\n\n\n\n\n\n\n\n" + e)
     if(typeof contract.address !== 'undefined') {
         console.log('Contract mined! address: ' + contract.address + ' transactionHash: ' + contract.transactionHash)
