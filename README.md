@@ -18,6 +18,12 @@ based paper: [스마트 컨트랙트 기반의 산업제어시스템 접근 제�
   - 기존 시스템(2_New_CounterCommand.sol)과 제안 시스템(1_New_Command.sol)을 [Remix](https://remix.ethereum.org)에서 컴파일하여 실행했을 때
     시간이 약 3초 정도가 더 걸리는 현상이 발생
   - 하지만, [Remix](https://remix.ethereum.org)에서는, 정확한 Timestamp를 비교하기 어렵기 때문에, `web3`를 이용해 `Javascript Timer`를 구현해야 함
+
+(01/18/21)
+  - web3를 이용한 실험환경 구성 중.. 컨트랙트를 node에 배포할 경우 address 관련 에러가 지속적으로 발생하는 중. 해결 방법을 아직 찾지 못함
+
+  
+
 ***
 ### Proposed System Architecture
 <div>
