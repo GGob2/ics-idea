@@ -44,10 +44,16 @@ contract Command_1 {
     bool public isVerified = false;
 
 
-    // Emp 컨트랙트 객체 생성
-    Emp public _emp = new Emp(); 
     
-    constructor() public {    
+
+    
+
+    
+    Emp public _emp = new Emp();
+
+
+    
+    constructor() payable public {    
         issueCmd_1(3); // 3번 emp가 실행
     }
 
@@ -127,7 +133,7 @@ contract Command_1 {
 }
 
 contract Emp {
-    constructor() public {
+    constructor() payable public {
         setEmp();
     }
 

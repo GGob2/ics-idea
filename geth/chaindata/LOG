@@ -1,42 +1,30 @@
-=============== Jan 14, 2021 (KST) ===============
-01:32:23.644006 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
-01:32:23.649995 db@open opening
-01:32:23.656951 version@stat F·[] S·0B[] Sc·[]
-01:32:23.659512 db@janitor F·2 G·0
-01:32:23.660241 db@open done T·9.5178ms
-01:32:23.683144 db@close closing
-01:32:23.683144 db@close done T·0s
-=============== Jan 14, 2021 (KST) ===============
-01:55:08.667179 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
-01:55:08.668176 version@stat F·[] S·0B[] Sc·[]
-01:55:08.668176 db@open opening
-01:55:08.668176 journal@recovery F·1
-01:55:08.670127 journal@recovery recovering @1
-01:55:08.674742 memdb@flush created L0@2 N·10 S·561B "H!\x04..\xa8\xc2k,v3":"r\x00\x00..\xa8\xc2k,v5"
-01:55:08.676148 version@stat F·[1] S·561B[561B] Sc·[0.25]
-01:55:08.682670 db@janitor F·3 G·0
-01:55:08.682670 db@open done T·14.4935ms
-=============== Jan 14, 2021 (KST) ===============
-02:24:08.413761 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
-02:24:08.414758 version@stat F·[1] S·561B[561B] Sc·[0.25]
-02:24:08.414758 db@open opening
-02:24:08.414758 journal@recovery F·1
-02:24:08.418323 journal@recovery recovering @3
-02:24:08.426684 memdb@flush created L0@5 N·3746 S·192KiB "Dat..ion,v12":"r\x00\x00..=\xc44,v3753"
-02:24:08.429677 version@stat F·[2] S·192KiB[192KiB] Sc·[0.50]
-02:24:08.453123 db@janitor F·4 G·0
-02:24:08.453123 db@open done T·38.3652ms
-02:52:00.391297 db@close closing
-02:52:00.393325 db@close done T·2.0276ms
-=============== Jan 15, 2021 (KST) ===============
-03:59:07.089220 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
-03:59:07.091532 version@stat F·[2] S·192KiB[192KiB] Sc·[0.50]
-03:59:07.092238 db@open opening
-03:59:07.092238 journal@recovery F·1
-03:59:07.098210 journal@recovery recovering @6
-03:59:07.139088 memdb@flush created L0@8 N·14054 S·724KiB "\x14m\x16..ǌ`,v17811":"\xe7ra..N\xa20,v17812"
-03:59:07.143232 version@stat F·[3] S·917KiB[917KiB] Sc·[0.75]
-03:59:07.151057 db@janitor F·5 G·0
-03:59:07.151057 db@open done T·58.8185ms
-04:04:04.079944 db@close closing
-04:04:04.080942 db@close done T·997.4µs
+=============== Jan 19, 2021 (KST) ===============
+14:13:56.739580 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+14:13:56.745557 db@open opening
+14:13:56.748538 version@stat F·[] S·0B[] Sc·[]
+14:13:56.750535 db@janitor F·2 G·0
+14:13:56.750535 db@open done T·4.9774ms
+14:13:56.771513 db@close closing
+14:13:56.772478 db@close done T·964.4µs
+=============== Jan 19, 2021 (KST) ===============
+14:14:06.547204 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+14:14:06.549207 version@stat F·[] S·0B[] Sc·[]
+14:14:06.549207 db@open opening
+14:14:06.550197 journal@recovery F·1
+14:14:06.553190 journal@recovery recovering @1
+14:14:06.557179 memdb@flush created L0@2 N·10 S·561B "H\x16\x91..̄\xc1,v3":"r\x00\x00..̄\xc1,v5"
+14:14:06.560678 version@stat F·[1] S·561B[561B] Sc·[0.25]
+14:14:06.576636 db@janitor F·3 G·0
+14:14:06.576636 db@open done T·27.4292ms
+=============== Jan 19, 2021 (KST) ===============
+14:49:22.631182 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+14:49:22.632231 version@stat F·[1] S·561B[561B] Sc·[0.25]
+14:49:22.632231 db@open opening
+14:49:22.633145 journal@recovery F·1
+14:49:22.635171 journal@recovery recovering @3
+14:49:22.689235 memdb@flush created L0@5 N·16536 S·885KiB "Dat..ion,v12":"r\x00\x00..\x8fm/,v16543"
+14:49:22.692226 version@stat F·[2] S·885KiB[885KiB] Sc·[0.50]
+14:49:22.717344 db@janitor F·4 G·0
+14:49:22.717344 db@open done T·85.1133ms
+15:07:57.294636 db@close closing
+15:07:57.295593 db@close done T·957.6µs

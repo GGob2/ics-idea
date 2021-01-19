@@ -1,30 +1,18 @@
-=============== Jan 14, 2021 (KST) ===============
-01:55:08.737655 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
-01:55:08.743465 db@open opening
-01:55:08.744713 version@stat F·[] S·0B[] Sc·[]
-01:55:08.748666 db@janitor F·2 G·0
-01:55:08.748853 db@open done T·5.3872ms
-=============== Jan 14, 2021 (KST) ===============
-02:24:08.492571 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
-02:24:08.493572 version@stat F·[] S·0B[] Sc·[]
-02:24:08.493572 db@open opening
-02:24:08.494568 journal@recovery F·1
-02:24:08.495566 journal@recovery recovering @1
-02:24:08.498654 memdb@flush created L0@2 N·2 S·176B "loc..seq,v2":"version,v1"
-02:24:08.500552 version@stat F·[1] S·176B[176B] Sc·[0.25]
-02:24:08.507534 db@janitor F·3 G·0
-02:24:08.507594 db@open done T·14.0221ms
-02:52:00.393325 db@close closing
-02:52:00.394299 db@close done T·974.7µs
-=============== Jan 15, 2021 (KST) ===============
-03:59:07.210491 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
-03:59:07.212485 version@stat F·[1] S·176B[176B] Sc·[0.25]
-03:59:07.212485 db@open opening
-03:59:07.212485 journal@recovery F·1
-03:59:07.215515 journal@recovery recovering @3
-03:59:07.218984 memdb@flush created L0@5 N·1 S·159B "loc..seq,v4":"loc..seq,v4"
-03:59:07.222542 version@stat F·[2] S·335B[335B] Sc·[0.50]
-03:59:07.246612 db@janitor F·4 G·0
-03:59:07.246866 db@open done T·34.3806ms
-04:04:04.081959 db@close closing
-04:04:04.082939 db@close done T·979.5µs
+=============== Jan 19, 2021 (KST) ===============
+14:14:06.641464 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+14:14:06.661412 db@open opening
+14:14:06.665399 version@stat F·[] S·0B[] Sc·[]
+14:14:06.673474 db@janitor F·2 G·0
+14:14:06.673474 db@open done T·12.0625ms
+=============== Jan 19, 2021 (KST) ===============
+14:49:22.832033 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+14:49:22.833028 version@stat F·[] S·0B[] Sc·[]
+14:49:22.833028 db@open opening
+14:49:22.834025 journal@recovery F·1
+14:49:22.836020 journal@recovery recovering @1
+14:49:22.840008 memdb@flush created L0@2 N·2 S·176B "loc..seq,v2":"version,v1"
+14:49:22.844032 version@stat F·[1] S·176B[176B] Sc·[0.25]
+14:49:22.851976 db@janitor F·3 G·0
+14:49:22.851976 db@open done T·18.9484ms
+15:07:57.296590 db@close closing
+15:07:57.296590 db@close done T·0s
