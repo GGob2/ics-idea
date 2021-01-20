@@ -18,7 +18,7 @@ const CommandContractInstance = CommandContractFactory.new({
     from: web3.eth.accounts[0],
     data : bin,
     value:'1000000000',
-    gas: '1000000000'
+    gas: '3000000'
 }, function (e,contract) {
     console.log(e, contract);
      
