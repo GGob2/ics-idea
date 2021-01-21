@@ -10,25 +10,26 @@ const bin = '0x60806040526005600155600a60025561014060405190810160405280600060ff1
 
 const CommandContractFactory = web3.eth.contract(JSON.parse(abi));
 
+console.log("\n\n컨트랙트 배포를  시도합니다... ~~\n\n")
 const startTime = Date.now();
-
+console.log(startTime + " @@@@@@@@@@@@@@@@@@ ")
 const CommandContractInstance = CommandContractFactory.new({
     from: web3.eth.accounts[0],
     data : bin,
     gas: '300000000'
 }, 
-    function (e,contract) {
-    console.log("\n\n컨트랙트 배포 시도 중.. .. ~~\n\n")
-    console.log(e, contract);
-    const endTime = Date.now();
-    console.log("소요 시간: 배포시작:  " + startTime + " 배포 마무리:   " + endTime);
-     
-    // Contract가 정상적으로 web3에 deploy되지 않는 문제 발생 중..(01/15) -- 해결
+     function (e,contract) {
+         if(e) {
+             console.log("this is e~~~ : \n\n " + e);
+         } 
 
-    if(typeof contract.address !== 'undefined') {  
-        console.log('Contract mined! address: ' + contract.address + ' transactionHash: ' + contract.transactionHash)
+         if(typeof contract.address !== 'undefined') {  
+            const endTime = Date.now();
+
+            console.log('Contract mined! address: ' + contract.address + ' transactionHash: ' + contract.transactionHash)
+            console.log("제안 시스템 소요 시간: 배포시작:  " + startTime + " 배포 마무리:   " + endTime);    
+        }
     }
-}
 
 )
 
