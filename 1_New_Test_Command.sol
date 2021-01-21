@@ -67,9 +67,6 @@ contract Command_1 {
         setIssuingEmp(_empNum-1);
 
         // 시간이 제일 오래걸리는 부분
-        
-        // TODO 구현 중... (1/10 ~)
-
         // 5번까지 더한다..
         for(uint j = 0; j < 5; j++) {
             sumOfVerifyingGroupScore += getEmpScore(randomNumList[j]);
