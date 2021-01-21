@@ -7,43 +7,12 @@ contract Command_1 {
     // 명령 3번의 점수
     uint public cmdScore = 5;
 
-     // Emp 컨트랙트 객체 생성
-    Emp public _emp = new Emp(); 
-
     // 검증에 사용 할 변수
     uint public sumOfVerifyingScore = 0;
 
     // 검증 여부를 알려줌
     bool public isVerified = false;
-    
-    constructor() public {    
-        issueCmd_1(3); // 3번 emp가 실행
-    }
 
-    function issueCmd_1(uint _empNum) payable public {
-        
-        _emp.setIssuingEmp(_empNum-1);        
-    }
-
-    function verify(uint _numOfVerifyingGroup) public payable returns (bool) {
-        // 검증 그룹 점수의 합 초기화
-        sumOfVerifyingScore += _emp.getEmpScore(_numOfVerifyingGroup);
-        
-        if(sumOfVerifyingScore >= cmdScore) {
-            isVerified = true;
-        }
-
-        return isVerified;
-    }
-}
-
-// 직원 정보 관리 컨트랙트
-contract Emp {
-    constructor() public {  
-        setEmp();
-    }
-
-     // 직원들의 정보를 담을 구조체
     struct employee {
         uint empNum;
         string empName;
@@ -54,6 +23,25 @@ contract Emp {
     // 직원 정보들의 array
     employee[] public employees;
 
+    constructor() public {    
+        issueCmd_1(3); // 3번 emp가 실행
+    }
+
+    function issueCmd_1(uint _empNum) payable public {
+        setEmp();   
+        setIssuingEmp(_empNum-1);        
+    }
+
+    function verify(uint _numOfVerifyingGroup) public payable returns (bool) {
+        // 검증 그룹 점수의 합 초기화
+        sumOfVerifyingScore += getEmpScore(_numOfVerifyingGroup);
+        
+        if(sumOfVerifyingScore >= cmdScore) {
+            isVerified = true;
+        }
+
+        return isVerified;
+    }
     // 직원 정보 입력하기 - test data
     function setEmp() public returns (uint) {
         employees.push(employee(employees.length+1, "사원1", 1, 0));
@@ -79,5 +67,5 @@ contract Emp {
     // 파라미터로 넘겨준 번호에 해당하는 직원의 점수를 가져오는 함수
     function getEmpScore(uint _empNum) public view returns(uint) {
         return employees[_empNum].empScore;
-    }    
+    }
 }
