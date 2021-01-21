@@ -42,12 +42,6 @@ contract Command_1 {
 
     // 검증 결과 저장
     bool public isVerified = false;
-
-
-    
-
-    
-
     
     Emp public _emp = new Emp();
 
