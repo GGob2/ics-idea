@@ -26,7 +26,7 @@ const CommandContractInstance = CommandContractFactory.new({
             const endTime = Date.now();
 
             console.log('Contract mined! address: ' + contract.address + ' transactionHash: ' + contract.transactionHash)
-            console.log("제안 시스템 소요 시간 --> 배포시작:  " + startTime + " 배포 마무리:   " + endTime + "  :  "+ (endTime - startTime));  
+            console.log("제안 시스템 소요 시간 --> 배포시작:  " + startTime + " 배포 마무리:   " + endTime + "  :  "+ (endTime - startTime)+"ms");  
         }
     }
 
