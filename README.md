@@ -39,7 +39,7 @@ based paper: [스마트 컨트랙트 기반의 산업제어시스템 접근 제�
 ***
 ### Geth console
 ```
-geth --networkid "10" --nodiscover --allow-insecure-unlock --datadir "C:\Users\MyungJoe Kang\Desktop\private_net\ics-idea" --rpc --rpcaddr "localhost" --rpcport "8545" --rpccorsdomain "*" --rpcapi "eth, net, web3, personal" --targetgaslimit "2000000" console 2>> C:\private_net\ics-idea\error.log
+geth --networkid "10" --nodiscover --allow-insecure-unlock --datadir "C:\Users\MyungJoe Kang\Desktop\private_net\ics-idea" --rpc --rpcaddr "localhost" --rpcport "8545" --rpccorsdomain "*" --rpcapi "eth, net, web3, personal" console 2>> C:\private_net\ics-idea\error.log
 ```
 
 ### `solc.exe`을 이용한 컴파일로 abi, bin 얻기
