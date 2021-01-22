@@ -17,7 +17,7 @@ const bin = '0x6080604052600560005560006001556000600260006101000a81548160ff02191
 
 
 console.log("\n\n컨트랙트 배포를  시도합니다... ~~\n\n")
-const startTime = new Date().getTime();
+const startTime = Date.now();
 const CommandContractInstance = CommandContractFactory.new({
     from: web3.eth.accounts[0],
     data : bin,
@@ -29,7 +29,7 @@ const CommandContractInstance = CommandContractFactory.new({
          } 
 
          if(typeof contract.address !== 'undefined') {  
-            const endTime = new Date().getTime();
+            const endTime = Date.now();
 
             console.log('Contract mined! address: ' + contract.address + ' transactionHash: ' + contract.transactionHash)
             console.log("기존 시스템 소요 시간 --> 배포시작:  " + startTime + " 배포 마무리:   " + endTime + "  :  "+ (endTime - startTime));    
