@@ -46,3 +46,8 @@ geth --networkid "10" --nodiscover --allow-insecure-unlock --datadir "C:\Users\M
 ```
 private_net\ics-idea>solc.exe --bin -o bin --overwrite --combined-json abi, bin <File>
 ```
+
+### (01/24) 실험결과: 
+<div>
+  <img width="900" src="https://user-images.githubusercontent.com/59510222/105629754-31437600-5e88-11eb-9cd7-ca9b7abd473d.PNG">
+</div>
