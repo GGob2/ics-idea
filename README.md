@@ -55,7 +55,7 @@ private_net\ics-idea>solc.exe --bin -o bin --overwrite --combined-json abi, bin 
 ### Timer Experiment
 <div>
  <img width="600" src="https://user-images.githubusercontent.com/59510222/106097687-1bc99700-617b-11eb-82f9-a80883313c54.png">
- 기존시스템 평균 소요시간: 3.5399s </br>
+ </br> 기존시스템 평균 소요시간: 3.5399s </br>
  제안시스템 평균 소요시간: 4.0754s </br>
  : 0.5355s 차이
 </div>
