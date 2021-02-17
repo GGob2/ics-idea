@@ -13,6 +13,10 @@ contract Command_1 {
     // 검증 여부를 알려줌
     bool public isVerified = false;
 
+    uint[] public randomNumList;
+
+    bool public exsited;
+
     struct employee {
         uint empNum;
         string empName;
@@ -36,12 +40,52 @@ contract Command_1 {
         // 검증 그룹 점수의 합 초기화
         sumOfVerifyingScore += getEmpScore(_numOfVerifyingGroup);
         
-        if(sumOfVerifyingScore >= cmdScore) {
+        if (sumOfVerifyingScore >= cmdScore) {
             isVerified = true;
         }
 
         return isVerified;
     }
+
+    // 랜덤 숫자를 구하는 함수
+    function random() public  {
+        // employees.length == 10 가정
+        for(uint i = 0; i < 20; i++) {
+
+            // randomNum = uint8(uint256(keccak256(abi.encodePacked(block.timestamp+i, block.difficulty-i))) % 10);
+
+            existed = false;
+
+            exam(uint8(uint256(keccak256(abi.encodePacked(block.timestamp+i, block.difficulty+i))) % 10));
+
+            if(existed == true){
+                continue;
+            }
+
+            if(existed == false) {
+                randomNumList.push(uint8(uint256(keccak256(abi.encodePacked(block.timestamp+i, block.difficulty+i))) % 10));
+            }
+
+            if(randomNumList.length >= 1){
+                break;
+            }
+        }
+    }
+
+
+    //검증 그룹에 해당 직원이 속해있는지 확인하는 함수
+    function exam(uint _randomNum) public  {
+        for(uint j = 0; j < randomNumList.length; j++) {
+            if(randomNumList[j] == _randomNum){
+                existed = true;
+                break;
+            } else {
+                existed = false;
+
+            }
+        }
+    }
+
     // 직원 정보 입력하기 - test data
     function setEmp() public returns (uint) {
         employees.push(employee(employees.length+1, "사원1", 1, 0));
