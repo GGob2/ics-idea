@@ -36,10 +36,13 @@ contract Command_1 {
         setIssuingEmp(_empNum-1);        
     }
 
-    function verify(uint _numOfVerifyingGroup) public payable returns (bool) {
+    // 검증 버튼을 눌렀을 때 자동으로 검증이 되는 시스템처럼 구현을 해야할 듯 .. 
+
+    function verify() public payable returns (bool) {
         // 검증 그룹 점수의 합 초기화
-        sumOfVerifyingScore += getEmpScore(_numOfVerifyingGroup);
-        
+        sumOfVerifyingScore += getEmpScore(uint8(uint256(keccak256(abi.encodePacked(block.timestamp+i, block.difficulty+i))) % 10));
+        zeroScoreToEmp(uint8(uint256(keccak256(abi.encodePacked(block.timestamp+i, block.difficulty+i))) % 10));
+
         if (sumOfVerifyingScore >= cmdScore) {
             isVerified = true;
         }
@@ -48,43 +51,41 @@ contract Command_1 {
     }
 
     // 랜덤 숫자를 구하는 함수
-    function random() public  {
-        // employees.length == 10 가정
-        for(uint i = 0; i < 20; i++) {
+    // function random() public  {
+    //     // employees.length == 10 가정
+    //     for(uint i = 0; i < 20; i++) {
 
-            // randomNum = uint8(uint256(keccak256(abi.encodePacked(block.timestamp+i, block.difficulty-i))) % 10);
+    //         // randomNum = uint8(uint256(keccak256(abi.encodePacked(block.timestamp+i, block.difficulty-i))) % 10);
 
-            existed = false;
+    //         existed = false;
 
-            exam(uint8(uint256(keccak256(abi.encodePacked(block.timestamp+i, block.difficulty+i))) % 10));
+    //         if(existed == true){
+    //             continue;
+    //         }
 
-            if(existed == true){
-                continue;
-            }
+    //         if(existed == false) {
+    //             randomNumList.push(uint8(uint256(keccak256(abi.encodePacked(block.timestamp+i, block.difficulty+i))) % 10));
+    //         }
 
-            if(existed == false) {
-                randomNumList.push(uint8(uint256(keccak256(abi.encodePacked(block.timestamp+i, block.difficulty+i))) % 10));
-            }
-
-            if(randomNumList.length >= 1){
-                break;
-            }
-        }
-    }
+    //         if(randomNumList.length >= 10){
+    //             break;
+    //         }
+    //     }
+    // }
 
 
     //검증 그룹에 해당 직원이 속해있는지 확인하는 함수
-    function exam(uint _randomNum) public  {
-        for(uint j = 0; j < randomNumList.length; j++) {
-            if(randomNumList[j] == _randomNum){
-                existed = true;
-                break;
-            } else {
-                existed = false;
+    // function exam(uint _randomNum) public  {
+    //     for(uint j = 0; j < randomNumList.length; j++) {
+    //         if(randomNumList[j] == _randomNum){
+    //             existed = true;
+    //             break;
+    //         } else {
+    //             existed = false;
 
-            }
-        }
-    }
+    //         }
+    //     }
+    // }
 
     // 직원 정보 입력하기 - test data
     function setEmp() public returns (uint) {
@@ -111,5 +112,10 @@ contract Command_1 {
     // 파라미터로 넘겨준 번호에 해당하는 직원의 점수를 가져오는 함수
     function getEmpScore(uint _empNum) public view returns(uint) {
         return employees[_empNum].empScore;
+    }
+
+    function zeroScoreToEmp(uint __empNum) public {
+        employees[__empNum].empScore = 0;
+        employees[__empNum].empTrustScore = 0;
     }
 }
