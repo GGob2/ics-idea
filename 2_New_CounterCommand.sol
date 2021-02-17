@@ -13,8 +13,6 @@ contract Command_1 {
     // 검증 여부를 알려줌
     bool public isVerified = false;
 
-    uint[] public randomNumList;
-
     bool public exsited;
 
     struct employee {
@@ -40,8 +38,8 @@ contract Command_1 {
 
     function verify() public payable returns (bool) {
         // 검증 그룹 점수의 합 초기화
-        sumOfVerifyingScore += getEmpScore(uint8(uint256(keccak256(abi.encodePacked(block.timestamp+i, block.difficulty+i))) % 10));
-        zeroScoreToEmp(uint8(uint256(keccak256(abi.encodePacked(block.timestamp+i, block.difficulty+i))) % 10));
+        sumOfVerifyingScore += getEmpScore(uint8(uint256(keccak256(abi.encodePacked(block.timestamp, block.difficulty))) % 10));
+        zeroScoreToEmp(uint8(uint256(keccak256(abi.encodePacked(block.timestamp, block.difficulty))) % 10));
 
         if (sumOfVerifyingScore >= cmdScore) {
             isVerified = true;
@@ -49,43 +47,6 @@ contract Command_1 {
 
         return isVerified;
     }
-
-    // 랜덤 숫자를 구하는 함수
-    // function random() public  {
-    //     // employees.length == 10 가정
-    //     for(uint i = 0; i < 20; i++) {
-
-    //         // randomNum = uint8(uint256(keccak256(abi.encodePacked(block.timestamp+i, block.difficulty-i))) % 10);
-
-    //         existed = false;
-
-    //         if(existed == true){
-    //             continue;
-    //         }
-
-    //         if(existed == false) {
-    //             randomNumList.push(uint8(uint256(keccak256(abi.encodePacked(block.timestamp+i, block.difficulty+i))) % 10));
-    //         }
-
-    //         if(randomNumList.length >= 10){
-    //             break;
-    //         }
-    //     }
-    // }
-
-
-    //검증 그룹에 해당 직원이 속해있는지 확인하는 함수
-    // function exam(uint _randomNum) public  {
-    //     for(uint j = 0; j < randomNumList.length; j++) {
-    //         if(randomNumList[j] == _randomNum){
-    //             existed = true;
-    //             break;
-    //         } else {
-    //             existed = false;
-
-    //         }
-    //     }
-    // }
 
     // 직원 정보 입력하기 - test data
     function setEmp() public returns (uint) {
