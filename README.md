@@ -46,6 +46,12 @@ geth --networkid "10" --nodiscover --allow-insecure-unlock --datadir "C:\Users\M
 ```
 private_net\ics-idea>solc.exe --bin -o bin --overwrite --combined-json abi, bin <File>
 ```
+### 실험순서 :fire:
+1. private_net에 접속
+2. 변경된 abi, bin Data를 이용해 Contract js 파일 작성
+3. private_net에서 Contract를 실행할 Account를 unlock 한 뒤, mining 시작
+4. node <contract js파일 이름> 으로 Contract Deploy
+5. 수행 시간 측정
 
 ### (01/24) 실험결과: 
 <div>
