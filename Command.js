@@ -25,7 +25,7 @@ const CommandContractInstance = CommandContractFactory.new({
          if(typeof contract.address !== 'undefined') {  
             const endTime = Date.now();
 
-            console.log('Contract mined! address: ' + contract.address + ' transactionHash: ' + contract.transactionHash + 'transactionGas' + contract.gas)
+            console.log('Contract mined! address: ' + contract.address + ' transactionHash: ' + contract.transactionHash)
             console.log("제안 시스템 소요 시간 --> 배포시작:  " + startTime + " 배포 마무리:   " + endTime + "  :  "+ (endTime - startTime)+"ms");
             console.log("총 소요시간 : " + ((endTime - startTime) / 1000) + "s")  
             
