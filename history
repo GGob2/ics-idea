@@ -38,3 +38,17 @@ miner.stop()
 miner.start()
 miner.stop()
 miner.start(4)
+eth.getBlock('1523')
+contract
+Contract
+miner.start(4)
+eth.getTransaction('0x063d02e322f5f2c0c9a8551a331f6bed7f2697e8d8d95c9bacc423f5938dc2')
+eth.getTransaction('0x063d02e322f5f2c0c9a8551a331f6bed7f2697e8d8d95c9bacc4263f5938dc2')
+eth.getBlock()
+eth.getBlock
+eth.getBlock(lastBlock)
+eth.getTransaction('0xffdc7c744893627f7f3f51bfcfe7f3d4c0ed14de956147d67fbf3a08d9c072d7')
+eth.getBlock(4508)
+eth.getTransaction('0xa40c654a03df9c8f7d10d5e72231d9b99c1d8b4f87d852a866a78e3c0ee4328e')
+eth.getBlock(4826)
+miner.stop()

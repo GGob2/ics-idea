@@ -212,3 +212,25 @@
 02:39:45.357282 version@stat F·[3 2] S·4MiB[1MiB 2MiB] Sc·[0.75 0.03]
 02:39:45.383213 db@janitor F·7 G·0
 02:39:45.383213 db@open done T·108.7088ms
+=============== Feb 24, 2021 (KST) ===============
+15:45:56.462530 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+15:45:56.466519 version@stat F·[3 2] S·4MiB[1MiB 2MiB] Sc·[0.75 0.03]
+15:45:56.466519 db@open opening
+15:45:56.466519 journal@recovery F·1
+15:45:56.551293 journal@recovery recovering @52
+15:45:56.562311 memdb@flush created L0@54 N·2055 S·111KiB "H\x00\xd1..\x96l\x89,v98740":"r\x00\x00..\t\xfc\xb5,v100641"
+15:45:56.565305 version@stat F·[4 2] S·4MiB[1MiB 2MiB] Sc·[1.00 0.03]
+15:45:56.573949 db@janitor F·8 G·0
+15:45:56.573949 db@open done T·107.4297ms
+15:45:56.574232 table@compaction L0·4 -> L1·2 S·4MiB Q·100646
+15:45:56.684940 table@build created L1@57 N·31503 S·2MiB "\x01\x8b\xf7..3)\x95,v74575":"h\x00\x00..QuZ,v16155"
+15:45:56.782006 table@build created L1@58 N·28837 S·1MiB "h\x00\x00..uZt,v16152":"\xff\xc7U..45\x15,v73575"
+15:45:56.782006 version@stat F·[0 2] S·3MiB[0B 3MiB] Sc·[0.00 0.04]
+15:45:56.788673 table@compaction committed F-4 S-510KiB Ke·0 D·11955 T·214.4405ms
+15:45:56.789678 table@remove removed @51
+15:45:56.789678 table@remove removed @48
+15:45:56.790667 table@remove removed @45
+15:45:56.792161 table@remove removed @43
+15:45:56.792646 table@remove removed @44
+16:22:55.523285 db@close closing
+16:22:55.525228 db@close done T·1.9429ms
