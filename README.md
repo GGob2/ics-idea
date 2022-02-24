@@ -1,5 +1,5 @@
 # ics-idea
-access control in ics with smart contract, blockchain (idea) + new trust score system in each rank
+Access control in ics with smart contract, blockchain (idea) + new trust score system in each rank
 
 based paper: [스마트 컨트랙트 기반의 산업제어시스템 접근 제어 메커니즘](https://www.dbpia.co.kr/journal/articleDetail?nodeId=NODE08746293)
 
@@ -22,6 +22,7 @@ based paper: [스마트 컨트랙트 기반의 산업제어시스템 접근 제�
 (01/18/21)
   - web3를 이용한 실험환경 구성 중.. 컨트랙트를 node에 배포할 경우 address 관련 에러가 지속적으로 발생하는 중. 해결 방법을 아직 찾지 못함
 
+(해결 및 논문 작성 완료, 최종 심사중 - 22/2/24)
   
 
 ***
