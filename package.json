@@ -17,6 +17,6 @@
   },
   "homepage": "https://github.com/GGob2/ics-idea#readme",
   "dependencies": {
-    "web3": "^0.20.4"
+    "web3": "^4.2.1"
   }
 }
